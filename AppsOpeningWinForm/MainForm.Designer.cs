@@ -79,6 +79,7 @@
             this.deleteLinkLabel.TabIndex = 2;
             this.deleteLinkLabel.TabStop = true;
             this.deleteLinkLabel.Text = "Delete";
+            this.deleteLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.deleteLinkLabel_LinkClicked);
             // 
             // editLinkLabel
             // 
@@ -94,6 +95,8 @@
             // OnlyClossedAppsCheckBox
             // 
             this.OnlyClossedAppsCheckBox.AutoSize = true;
+            this.OnlyClossedAppsCheckBox.Checked = true;
+            this.OnlyClossedAppsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.OnlyClossedAppsCheckBox.Location = new System.Drawing.Point(83, 577);
             this.OnlyClossedAppsCheckBox.Name = "OnlyClossedAppsCheckBox";
             this.OnlyClossedAppsCheckBox.Size = new System.Drawing.Size(300, 41);

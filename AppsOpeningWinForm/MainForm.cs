@@ -33,8 +33,9 @@ namespace AppsOpeningWinForm
         private void SetBindings()
         {
             layoutsListBox.Items.Clear();
-            layoutsListBox.Items.AddRange(manager.GetLayoutModels().ToArray());
+            layoutsListBox.Items.AddRange(manager.GetLayoutModels().OrderBy(x=>x.Name).ToArray());
             layoutsListBox.DisplayMember = "Name";
+
             if (layoutsListBox.Items.Count != 0)
                 layoutsListBox.SetSelected(0, true);
         }
@@ -48,6 +49,16 @@ namespace AppsOpeningWinForm
             catch(Win32Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void deleteLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            LayoutModel layoutToDelete = (LayoutModel)layoutsListBox.SelectedItem;
+            if (MessageBox.Show($"Delete {layoutToDelete.Name} layout?", "Delete layout", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                manager.DeleteLayoutModel(layoutToDelete);
+                SetBindings();
             }
         }
     }

@@ -9,7 +9,7 @@ namespace OpeningDifferentApps.Models
     public class LayoutModel : IIds
     {
         public int Id { get; set; }        
-        public List<AppModel> apps = new List<AppModel>();
+        public List<AppModel> Apps = new List<AppModel>();
         public string Name { get; set; }
     }
 }

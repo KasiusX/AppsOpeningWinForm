@@ -17,22 +17,24 @@ namespace AppsOpeningWinForm
     public partial class NewLayoutForm : Form
     {
         private AppsManager manager;
-        public List<LayoutModel> LayoutsToCreate{ get; set; }
         public NewLayoutForm(AppsManager manager)
         {
             InitializeComponent();
             this.manager = manager;
-            LayoutsToCreate = new List<LayoutModel>();
-            ResetBindings();
+            SetBindings();
         }
 
         private void createLayoutButton_Click(object sender, EventArgs e)
         {
-            if (nameValue.Text != "" && aviableAppsCheckListBox.CheckedItems.Count != 0)
+            List<AppModel> apps = GetCheckedApps();
+            try
             {
-                List<AppModel> apps = GetCheckedApps();
-                LayoutsToCreate.Add(new LayoutModel { Name = nameValue.Text, apps = apps });
-                ResetBindings();
+                if (manager.CreateNewLayoutModels(nameValue.Text, apps))
+                    SetBindings();
+            }
+            catch(ValidationException ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
         private List<AppModel> GetCheckedApps()
@@ -44,18 +46,12 @@ namespace AppsOpeningWinForm
             }
             return output;
         }
-        private void ResetBindings()
+        private void SetBindings()
         {
             aviableAppsCheckListBox.Items.Clear();
             aviableAppsCheckListBox.Items.AddRange(manager.GetVisibleProcesses().ToArray());
             aviableAppsCheckListBox.DisplayMember = "Name";
             nameValue.Text = "";
-        }
-
-        private void NewLayoutForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if(LayoutsToCreate.Count != 0)
-            manager.CreateNewLayoutModels(LayoutsToCreate);
         }
 
         private void backButton_Click(object sender, EventArgs e)
@@ -65,7 +61,7 @@ namespace AppsOpeningWinForm
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
-            ResetBindings();
+            SetBindings();
         }
     }
 }

@@ -2,6 +2,7 @@
 using OpeningDifferentApps.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Lifetime;
 using System.Security;
@@ -55,9 +56,10 @@ namespace OpeningDifferentApps
             }
             return output;
         }
+        
         public static List<AppModel> CorrectAppsIds(this List<AppModel> appModels)
         {
-            appModels.OrderBy(x => x.Id);
+            appModels = appModels.OrderBy(x => x.Id).ToList();
             int id = appModels.Count == 0 ? 1: appModels.Last().Id + 1;
             foreach (AppModel app in appModels)
             {
@@ -81,7 +83,7 @@ namespace OpeningDifferentApps
                 {
                     Id = Convert.ToInt32(data[0]),
                     Name = data[1],
-                    apps = allApps.Where(x => appIds.Contains(x.Id.ToString())).ToList()
+                    Apps = allApps.Where(x => appIds.Contains(x.Id.ToString())).ToList()
                 };
                 output.Add(model);
             }
@@ -93,7 +95,7 @@ namespace OpeningDifferentApps
             foreach (LayoutModel layout in layoutModels)
             {
                 string appIds = "";
-                foreach (AppModel app in layout.apps)
+                foreach (AppModel app in layout.Apps)
                 {
                     appIds += $"{app.Id}|";
                 }
@@ -101,10 +103,11 @@ namespace OpeningDifferentApps
                 output.Add($"{layout.Id},{layout.Name},{appIds}");
             }
             return output;
-        }
+        }        
+
         public static List<LayoutModel> CorrectLayoutIds(this List<LayoutModel> layoutModels)
         {
-            layoutModels.OrderBy(x => x.Id);
+            layoutModels = layoutModels.OrderBy(x => x.Id).ToList();
             int id = layoutModels.Count == 0 ? 1 : layoutModels.Last().Id + 1;
             foreach (LayoutModel app in layoutModels)
             {

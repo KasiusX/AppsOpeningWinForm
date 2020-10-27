@@ -125,7 +125,6 @@
             this.Margin = new System.Windows.Forms.Padding(10, 9, 10, 9);
             this.Name = "NewLayoutForm";
             this.Text = "New layout";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewLayoutForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

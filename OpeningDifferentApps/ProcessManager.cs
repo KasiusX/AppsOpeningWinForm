@@ -38,12 +38,13 @@ namespace OpeningDifferentApps
                 {
                     app.FilePath = p.MainModule.FileName;
                     app.Name = p.ProcessName;
-                    output.Add(app);
                 }
-                catch
-                {                   
+                catch(Exception e)
+                {
+                    app.FilePath = e.Message;
+                    app.Name = p.ProcessName +" "+ e.Message;                    
                 }
-                
+                output.Add(app);
             }
             return output;
         }
@@ -51,17 +52,29 @@ namespace OpeningDifferentApps
         public static void LoadLayout(LayoutModel layout, bool onlyClosed)
         {
             List<Process> visibleProcesses = GetVisibleProcesses();
-            foreach (AppModel app in layout.apps)
+            foreach (AppModel app in layout.Apps)
             {
                 if (onlyClosed)
                 {
                     if (visibleProcesses.Where(x => x.ProcessName == app.Name).ToList().Count == 0)
-                        Process.Start(app.FilePath);
+                        StartApp(app);
                 }
                 else
                 {
-                    Process.Start(app.FilePath);
+                    StartApp(app);
                 }
+            }
+        }
+
+        private static void StartApp(AppModel app)
+        {
+            try
+            {
+                Process.Start(app.FilePath);
+            }
+            catch(Win32Exception e)
+            {
+                throw new Win32Exception($"{app.Name}({e.Message})");
             }
         }
     }

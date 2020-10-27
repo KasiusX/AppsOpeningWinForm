@@ -12,21 +12,7 @@ using System.Threading.Tasks;
 namespace OpeningDifferentApps
 {
     internal static class FilesWriter
-    {
-        public static void SaveAppModels(List<AppModel> apps)
-        {
-            string path = FileExtensions.GetRootFile().GetAppModelsFile();
-            apps.CorrectAppsIds();
-            List<string> appData = apps.ConvertAppsOnStrings();
-
-            using (StreamWriter writter = new StreamWriter(path))
-            {
-                foreach (string data in appData)
-                {
-                    writter.WriteLine(data);
-                }
-            }
-        }
+    {       
 
         public static List<AppModel> LoadAppModels()
         {
@@ -40,29 +26,20 @@ namespace OpeningDifferentApps
             return appsData.ConvertAppsOnModels();
         }
 
-        public static void SaveLayoutModels(this List<LayoutModel> layouts)
+        private static void SaveAppModels(List<AppModel> apps)
         {
-            string path = FileExtensions.GetRootFile().GetLayoutsModelsFiles();
-            layouts = layouts.Concat(LoadLayoutModels()).ToList();
-            layouts.CorrectLayoutIds();
+            string path = FileExtensions.GetRootFile().GetAppModelsFile();
+            apps.CorrectAppsIds();
+            List<string> appData = apps.ConvertAppsOnStrings();
 
-            List<AppModel> allApps = new List<AppModel>();
-            foreach (LayoutModel layout in layouts)
-            {
-                allApps = allApps.Concat(layout.apps).ToList();
-            }
-            SaveAppModels(allApps);
-
-            List<string> layoutData = layouts.ConvertLayoutsOnStrings();            
             using (StreamWriter writter = new StreamWriter(path))
             {
-                foreach (string data in layoutData)
+                foreach (string data in appData)
                 {
                     writter.WriteLine(data);
                 }
             }
         }
-
         public static List<LayoutModel> LoadLayoutModels()
         {
             string path = FileExtensions.GetRootFile().GetLayoutsModelsFiles();
@@ -73,6 +50,42 @@ namespace OpeningDifferentApps
                 return new List<LayoutModel>();
 
             return layoutData.ConvertLayoutsOnModels(LoadAppModels());
+        }
+
+        private static void SaveLayoutModels(this List<LayoutModel> layouts)
+        {
+            string path = FileExtensions.GetRootFile().GetLayoutsModelsFiles();
+            layouts.CorrectLayoutIds();
+
+            List<AppModel> allApps = new List<AppModel>();
+            foreach (LayoutModel layout in layouts)
+            {
+                allApps = allApps.Concat(layout.Apps).ToList();
+            }
+            SaveAppModels(allApps);
+
+            List<string> layoutData = layouts.ConvertLayoutsOnStrings();
+            using (StreamWriter writter = new StreamWriter(path))
+            {
+                foreach (string data in layoutData)
+                {
+                    writter.WriteLine(data);
+                }
+            }
+        }        
+
+        public static void SaveLayoutModel(LayoutModel layout)
+        {
+            List<LayoutModel> allLayouts = LoadLayoutModels();
+            allLayouts.Add(layout);
+            allLayouts.SaveLayoutModels();
+        }
+
+        public static void DeleteLayoutModel(LayoutModel layout)
+        {            
+            List<LayoutModel> layouts = LoadLayoutModels();
+            layouts.Remove(layout);
+            layouts.SaveLayoutModels();
         }
     }
 }
