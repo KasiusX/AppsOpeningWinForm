@@ -19,7 +19,16 @@ namespace OpeningDifferentApps
             string path = FileExtensions.GetRootFile().GetAppModelsFile();
             string[] appsData;
             if (File.Exists(path))
-                appsData = File.ReadAllLines(path);
+            {
+                try
+                {
+                    appsData = File.ReadAllLines(path);
+                }
+                catch (IOException)
+                {
+                    throw new Exception("Close data files.");
+                }
+            }
             else
                 return new List<AppModel>();
 
@@ -32,12 +41,19 @@ namespace OpeningDifferentApps
             apps.CorrectAppsIds();
             List<string> appData = apps.ConvertAppsOnStrings();
 
-            using (StreamWriter writter = new StreamWriter(path))
+            try
             {
-                foreach (string data in appData)
+                using (StreamWriter writter = new StreamWriter(path))
                 {
-                    writter.WriteLine(data);
+                    foreach (string data in appData)
+                    {
+                        writter.WriteLine(data);
+                    }
                 }
+            }
+            catch (IOException)
+            {
+                throw new Exception("Close data files.");
             }
         }
         public static List<LayoutModel> LoadLayoutModels()
@@ -45,7 +61,16 @@ namespace OpeningDifferentApps
             string path = FileExtensions.GetRootFile().GetLayoutsModelsFiles();
             string[] layoutData;
             if (File.Exists(path))
-                layoutData = File.ReadAllLines(path);
+            {
+                try
+                {
+                    layoutData = File.ReadAllLines(path);
+                }
+                catch(IOException)
+                {
+                    throw new Exception("Close data files.");
+                }
+            }
             else
                 return new List<LayoutModel>();
 
@@ -65,12 +90,19 @@ namespace OpeningDifferentApps
             SaveAppModels(allApps);
 
             List<string> layoutData = layouts.ConvertLayoutsOnStrings();
-            using (StreamWriter writter = new StreamWriter(path))
+            try
             {
-                foreach (string data in layoutData)
+                using (StreamWriter writter = new StreamWriter(path))
                 {
-                    writter.WriteLine(data);
+                    foreach (string data in layoutData)
+                    {
+                        writter.WriteLine(data);
+                    }
                 }
+            }
+            catch(IOException)
+            {
+                throw new Exception("Close data files");
             }
         }        
 
@@ -84,7 +116,17 @@ namespace OpeningDifferentApps
         public static void DeleteLayoutModel(LayoutModel layout)
         {            
             List<LayoutModel> layouts = LoadLayoutModels();
-            layouts.Remove(layout);
+            LayoutModel layoutToDelete = layouts.Where(x => x.Id == layout.Id).First();
+            layouts.Remove(layoutToDelete);
+            layouts.SaveLayoutModels();
+        }
+
+        public static void EditLayoutModel(LayoutModel layout)
+        {
+            List<LayoutModel> layouts = LoadLayoutModels();
+            LayoutModel layoutToDelete = layouts.Where(x => x.Id == layout.Id).First();
+            layoutToDelete.Name = layout.Name;
+            layoutToDelete.Apps = layout.Apps;
             layouts.SaveLayoutModels();
         }
     }

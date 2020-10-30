@@ -38,13 +38,13 @@ namespace OpeningDifferentApps
                 {
                     app.FilePath = p.MainModule.FileName;
                     app.Name = p.ProcessName;
+                    output.Add(app);
+
                 }
-                catch(Exception e)
+                catch(Win32Exception)
                 {
-                    app.FilePath = e.Message;
-                    app.Name = p.ProcessName +" "+ e.Message;                    
                 }
-                output.Add(app);
+                
             }
             return output;
         }

@@ -91,6 +91,7 @@
             this.editLinkLabel.TabIndex = 2;
             this.editLinkLabel.TabStop = true;
             this.editLinkLabel.Text = "Edit";
+            this.editLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.editLinkLabel_LinkClicked);
             // 
             // OnlyClossedAppsCheckBox
             // 

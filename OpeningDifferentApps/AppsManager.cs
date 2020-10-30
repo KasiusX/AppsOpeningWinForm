@@ -27,8 +27,8 @@ namespace OpeningDifferentApps
 
         public bool CreateNewLayoutModels(string name, List<AppModel> apps)
         {
-            bool isValidated = validations.ValidateLayout(name, apps);
-            if (isValidated)
+            bool isValid = validations.ValidateLayout(name, apps);
+            if (isValid)
             {
                 LayoutModel layout = new LayoutModel
                 {
@@ -38,7 +38,23 @@ namespace OpeningDifferentApps
                 FilesWriter.SaveLayoutModel(layout);
 
             }
-            return isValidated;
+            return isValid;
+        }
+
+        public bool EditLayoutModel(string name, List<AppModel> apps, int id)
+        {
+            bool isValid = validations.ValidateLayout(name, apps);
+            if (isValid)
+            {
+                LayoutModel layout = new LayoutModel
+                {
+                    Name = name,
+                    Apps = apps,
+                    Id = id
+                };
+                FilesWriter.EditLayoutModel(layout);
+            }
+            return isValid;
         }
 
         public void LoadLayoutModel(LayoutModel layout, bool onlyClosed)

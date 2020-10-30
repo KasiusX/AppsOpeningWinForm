@@ -26,13 +26,17 @@ namespace AppsOpeningWinForm
 
         private void createLayoutButton_Click(object sender, EventArgs e)
         {
-            List<AppModel> apps = GetCheckedApps();
+            List<AppModel> selectedApps = GetCheckedApps();
             try
             {
-                if (manager.CreateNewLayoutModels(nameValue.Text, apps))
+                if (manager.CreateNewLayoutModels(nameValue.Text, selectedApps))
                     SetBindings();
             }
             catch(ValidationException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch(Exception ex) 
             {
                 MessageBox.Show(ex.Message);
             }
@@ -52,7 +56,7 @@ namespace AppsOpeningWinForm
             aviableAppsCheckListBox.Items.AddRange(manager.GetVisibleProcesses().ToArray());
             aviableAppsCheckListBox.DisplayMember = "Name";
             nameValue.Text = "";
-        }
+        }        
 
         private void backButton_Click(object sender, EventArgs e)
         {
