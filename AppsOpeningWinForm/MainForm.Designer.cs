@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainLayoutForm));
             this.createLayoutButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.layoutsListBox = new System.Windows.Forms.ListBox();
             this.deleteLinkLabel = new System.Windows.Forms.LinkLabel();
             this.editLinkLabel = new System.Windows.Forms.LinkLabel();
             this.OnlyClossedAppsCheckBox = new System.Windows.Forms.CheckBox();
+            this.closeAllAppsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // createLayoutButton
@@ -105,19 +107,32 @@
             this.OnlyClossedAppsCheckBox.Text = "Only closed apps";
             this.OnlyClossedAppsCheckBox.UseVisualStyleBackColor = true;
             // 
+            // closeAllAppsButton
+            // 
+            this.closeAllAppsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.closeAllAppsButton.Location = new System.Drawing.Point(83, 708);
+            this.closeAllAppsButton.Name = "closeAllAppsButton";
+            this.closeAllAppsButton.Size = new System.Drawing.Size(246, 78);
+            this.closeAllAppsButton.TabIndex = 0;
+            this.closeAllAppsButton.Text = "Close all apps";
+            this.closeAllAppsButton.UseVisualStyleBackColor = false;
+            this.closeAllAppsButton.Click += new System.EventHandler(this.closeAllAppsButton_Click);
+            // 
             // MainLayoutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(19F, 37F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(423, 736);
+            this.ClientSize = new System.Drawing.Size(423, 820);
             this.Controls.Add(this.OnlyClossedAppsCheckBox);
             this.Controls.Add(this.editLinkLabel);
             this.Controls.Add(this.deleteLinkLabel);
             this.Controls.Add(this.layoutsListBox);
+            this.Controls.Add(this.closeAllAppsButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.createLayoutButton);
             this.Font = new System.Drawing.Font("Lucida Sans", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(10, 8, 10, 8);
             this.Name = "MainLayoutForm";
             this.Text = "Layouts";
@@ -134,6 +149,7 @@
         private System.Windows.Forms.LinkLabel deleteLinkLabel;
         private System.Windows.Forms.LinkLabel editLinkLabel;
         private System.Windows.Forms.CheckBox OnlyClossedAppsCheckBox;
+        private System.Windows.Forms.Button closeAllAppsButton;
     }
 }
 

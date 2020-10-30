@@ -63,6 +63,8 @@ namespace AppsOpeningWinForm
         private void deleteLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             LayoutModel layoutToDelete = (LayoutModel)layoutsListBox.SelectedItem;
+            if (layoutsListBox.SelectedItem == null)
+                return;
             if (MessageBox.Show($"Delete {layoutToDelete.Name} layout?", "Delete layout", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 try
@@ -81,6 +83,11 @@ namespace AppsOpeningWinForm
         {
             EditLayoutForm form = new EditLayoutForm(manager, (LayoutModel)layoutsListBox.SelectedItem);
             form.ShowDialog();
+        }
+
+        private void closeAllAppsButton_Click(object sender, EventArgs e)
+        {
+            manager.CloseAllVisibleProcesses();
         }
     }
 }

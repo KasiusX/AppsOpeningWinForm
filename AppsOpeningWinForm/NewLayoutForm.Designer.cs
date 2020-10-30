@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewLayoutForm));
             this.aviableAppsCheckListBox = new System.Windows.Forms.CheckedListBox();
             this.createLayoutButton = new System.Windows.Forms.Button();
             this.backButton = new System.Windows.Forms.Button();
@@ -134,6 +135,7 @@
             this.Controls.Add(this.createLayoutButton);
             this.Controls.Add(this.aviableAppsCheckListBox);
             this.Font = new System.Drawing.Font("Lucida Sans", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(10, 9, 10, 9);
             this.MaximumSize = new System.Drawing.Size(600, 675);
             this.MinimumSize = new System.Drawing.Size(600, 675);

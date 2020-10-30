@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditLayoutForm));
             this.refreshButton = new System.Windows.Forms.Button();
             this.openedAppsLabel = new System.Windows.Forms.Label();
             this.nameValue = new System.Windows.Forms.TextBox();
@@ -134,11 +135,12 @@
             this.Controls.Add(this.editLayoutButton);
             this.Controls.Add(this.aviableAppsCheckListBox);
             this.Font = new System.Drawing.Font("Lucida Sans", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(10, 9, 10, 9);
             this.MaximumSize = new System.Drawing.Size(600, 675);
             this.MinimumSize = new System.Drawing.Size(600, 675);
             this.Name = "EditLayoutForm";
-            this.Text = "Edit Layout";
+            this.Text = "Edit layout";
             this.ResumeLayout(false);
             this.PerformLayout();
 

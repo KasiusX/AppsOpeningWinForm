@@ -66,5 +66,10 @@ namespace OpeningDifferentApps
         {
             FilesWriter.DeleteLayoutModel(layout);
         }
+
+        public void CloseAllVisibleProcesses()
+        {
+            ProcessManager.CloseAllVisibleProcesses();
+        }
     }
 }
