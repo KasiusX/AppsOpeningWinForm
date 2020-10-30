@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Lifetime;
 using System.Security;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,13 +14,15 @@ namespace OpeningDifferentApps
 {
     internal static class FileExtensions
     {
-        private static string rootFile = @"D:\Data\StartingDifferentAppsData\";
+        private static string rootFolder = Environment.SpecialFolder.ApplicationData + @"\LayoutData\";
         private static string appModelsFile = "AppModels.csv";
         private static string layoutsModelsFiles = "LayoutModels.csv";
 
         public static string GetRootFile()
         {
-            return rootFile;
+            if (!Directory.Exists(rootFolder))
+                Directory.CreateDirectory(rootFolder);                
+            return rootFolder;
         }
 
         public static string GetAppModelsFile(this string root)

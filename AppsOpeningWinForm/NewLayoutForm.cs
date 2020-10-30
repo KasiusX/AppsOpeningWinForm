@@ -30,15 +30,18 @@ namespace AppsOpeningWinForm
             try
             {
                 if (manager.CreateNewLayoutModels(nameValue.Text, selectedApps))
+                {
                     SetBindings();
+                    Close();
+                }
             }
             catch(ValidationException ex)
             {
-                MessageBox.Show(ex.Message);
+                InformationMessageBox(ex.Message, "Not valid input");
             }
             catch(Exception ex) 
             {
-                MessageBox.Show(ex.Message);
+                WarningMessageBox(ex.Message, "Data files opened");
             }
         }
         private List<AppModel> GetCheckedApps()
@@ -67,5 +70,16 @@ namespace AppsOpeningWinForm
         {
             SetBindings();
         }
+
+        private void WarningMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        private void InformationMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        private void nameValue_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                createLayoutButton_Click(this, EventArgs.Empty);
+        }
+
+        
     }
 }

@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainLayoutForm));
             this.createLayoutButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.loadLayoutButton = new System.Windows.Forms.Button();
             this.layoutsListBox = new System.Windows.Forms.ListBox();
             this.deleteLinkLabel = new System.Windows.Forms.LinkLabel();
             this.editLinkLabel = new System.Windows.Forms.LinkLabel();
@@ -44,21 +44,21 @@
             this.createLayoutButton.Location = new System.Drawing.Point(83, 493);
             this.createLayoutButton.Name = "createLayoutButton";
             this.createLayoutButton.Size = new System.Drawing.Size(246, 78);
-            this.createLayoutButton.TabIndex = 0;
+            this.createLayoutButton.TabIndex = 1;
             this.createLayoutButton.Text = "Create layout";
             this.createLayoutButton.UseVisualStyleBackColor = false;
             this.createLayoutButton.Click += new System.EventHandler(this.createLayoutButton_Click);
             // 
-            // button1
+            // loadLayoutButton
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.button1.Location = new System.Drawing.Point(83, 624);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(246, 78);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Load layout";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.loadLayoutButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.loadLayoutButton.Location = new System.Drawing.Point(83, 624);
+            this.loadLayoutButton.Name = "loadLayoutButton";
+            this.loadLayoutButton.Size = new System.Drawing.Size(246, 78);
+            this.loadLayoutButton.TabIndex = 3;
+            this.loadLayoutButton.Text = "Load layout";
+            this.loadLayoutButton.UseVisualStyleBackColor = false;
+            this.loadLayoutButton.Click += new System.EventHandler(this.loadLayoutButton_Click);
             // 
             // layoutsListBox
             // 
@@ -69,7 +69,8 @@
             this.layoutsListBox.Location = new System.Drawing.Point(12, 39);
             this.layoutsListBox.Name = "layoutsListBox";
             this.layoutsListBox.Size = new System.Drawing.Size(399, 448);
-            this.layoutsListBox.TabIndex = 1;
+            this.layoutsListBox.TabIndex = 0;
+            this.layoutsListBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.layoutsListBox_KeyDown);
             // 
             // deleteLinkLabel
             // 
@@ -78,7 +79,7 @@
             this.deleteLinkLabel.Location = new System.Drawing.Point(343, 14);
             this.deleteLinkLabel.Name = "deleteLinkLabel";
             this.deleteLinkLabel.Size = new System.Drawing.Size(68, 22);
-            this.deleteLinkLabel.TabIndex = 2;
+            this.deleteLinkLabel.TabIndex = 6;
             this.deleteLinkLabel.TabStop = true;
             this.deleteLinkLabel.Text = "Delete";
             this.deleteLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.deleteLinkLabel_LinkClicked);
@@ -90,7 +91,7 @@
             this.editLinkLabel.Location = new System.Drawing.Point(12, 14);
             this.editLinkLabel.Name = "editLinkLabel";
             this.editLinkLabel.Size = new System.Drawing.Size(47, 22);
-            this.editLinkLabel.TabIndex = 2;
+            this.editLinkLabel.TabIndex = 5;
             this.editLinkLabel.TabStop = true;
             this.editLinkLabel.Text = "Edit";
             this.editLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.editLinkLabel_LinkClicked);
@@ -103,7 +104,7 @@
             this.OnlyClossedAppsCheckBox.Location = new System.Drawing.Point(83, 577);
             this.OnlyClossedAppsCheckBox.Name = "OnlyClossedAppsCheckBox";
             this.OnlyClossedAppsCheckBox.Size = new System.Drawing.Size(300, 41);
-            this.OnlyClossedAppsCheckBox.TabIndex = 3;
+            this.OnlyClossedAppsCheckBox.TabIndex = 2;
             this.OnlyClossedAppsCheckBox.Text = "Only closed apps";
             this.OnlyClossedAppsCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -113,7 +114,7 @@
             this.closeAllAppsButton.Location = new System.Drawing.Point(83, 708);
             this.closeAllAppsButton.Name = "closeAllAppsButton";
             this.closeAllAppsButton.Size = new System.Drawing.Size(246, 78);
-            this.closeAllAppsButton.TabIndex = 0;
+            this.closeAllAppsButton.TabIndex = 4;
             this.closeAllAppsButton.Text = "Close all apps";
             this.closeAllAppsButton.UseVisualStyleBackColor = false;
             this.closeAllAppsButton.Click += new System.EventHandler(this.closeAllAppsButton_Click);
@@ -129,7 +130,7 @@
             this.Controls.Add(this.deleteLinkLabel);
             this.Controls.Add(this.layoutsListBox);
             this.Controls.Add(this.closeAllAppsButton);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.loadLayoutButton);
             this.Controls.Add(this.createLayoutButton);
             this.Font = new System.Drawing.Font("Lucida Sans", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -144,7 +145,7 @@
         #endregion
 
         private System.Windows.Forms.Button createLayoutButton;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button loadLayoutButton;
         private System.Windows.Forms.ListBox layoutsListBox;
         private System.Windows.Forms.LinkLabel deleteLinkLabel;
         private System.Windows.Forms.LinkLabel editLinkLabel;

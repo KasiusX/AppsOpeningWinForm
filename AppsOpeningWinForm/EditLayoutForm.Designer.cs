@@ -48,7 +48,7 @@
             this.refreshButton.Location = new System.Drawing.Point(240, 89);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(46, 37);
-            this.refreshButton.TabIndex = 6;
+            this.refreshButton.TabIndex = 1;
             this.refreshButton.UseVisualStyleBackColor = false;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
@@ -64,9 +64,10 @@
             // nameValue
             // 
             this.nameValue.Location = new System.Drawing.Point(308, 169);
+            this.nameValue.MaxLength = 30;
             this.nameValue.Name = "nameValue";
             this.nameValue.Size = new System.Drawing.Size(246, 45);
-            this.nameValue.TabIndex = 10;
+            this.nameValue.TabIndex = 5;
             // 
             // nameLabel
             // 
@@ -83,7 +84,7 @@
             this.backButton.Location = new System.Drawing.Point(308, 436);
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(246, 78);
-            this.backButton.TabIndex = 7;
+            this.backButton.TabIndex = 3;
             this.backButton.Text = "Back";
             this.backButton.UseVisualStyleBackColor = false;
             this.backButton.Click += new System.EventHandler(this.backButton_Click);
@@ -94,7 +95,7 @@
             this.editLayoutButton.Location = new System.Drawing.Point(308, 520);
             this.editLayoutButton.Name = "editLayoutButton";
             this.editLayoutButton.Size = new System.Drawing.Size(246, 78);
-            this.editLayoutButton.TabIndex = 8;
+            this.editLayoutButton.TabIndex = 4;
             this.editLayoutButton.Text = "Edit layout";
             this.editLayoutButton.UseVisualStyleBackColor = false;
             this.editLayoutButton.Click += new System.EventHandler(this.editLayoutButton_Click);
@@ -108,7 +109,7 @@
             this.aviableAppsCheckListBox.Location = new System.Drawing.Point(12, 129);
             this.aviableAppsCheckListBox.Name = "aviableAppsCheckListBox";
             this.aviableAppsCheckListBox.Size = new System.Drawing.Size(274, 469);
-            this.aviableAppsCheckListBox.TabIndex = 5;
+            this.aviableAppsCheckListBox.TabIndex = 0;
             // 
             // label1
             // 

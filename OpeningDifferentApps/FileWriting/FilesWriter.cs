@@ -121,12 +121,12 @@ namespace OpeningDifferentApps
             layouts.SaveLayoutModels();
         }
 
-        public static void EditLayoutModel(LayoutModel layout)
+        public static void EditLayoutModel(LayoutModel editedLayout)
         {
             List<LayoutModel> layouts = LoadLayoutModels();
-            LayoutModel layoutToDelete = layouts.Where(x => x.Id == layout.Id).First();
-            layoutToDelete.Name = layout.Name;
-            layoutToDelete.Apps = layout.Apps;
+            LayoutModel layoutToDelete = layouts.Where(x => x.Id == editedLayout.Id).First();
+            layouts.Remove(layoutToDelete);
+            layouts.Add(editedLayout);
             layouts.SaveLayoutModels();
         }
     }

@@ -56,7 +56,7 @@
             this.createLayoutButton.Location = new System.Drawing.Point(308, 521);
             this.createLayoutButton.Name = "createLayoutButton";
             this.createLayoutButton.Size = new System.Drawing.Size(246, 78);
-            this.createLayoutButton.TabIndex = 1;
+            this.createLayoutButton.TabIndex = 4;
             this.createLayoutButton.Text = "Create layout";
             this.createLayoutButton.UseVisualStyleBackColor = false;
             this.createLayoutButton.Click += new System.EventHandler(this.createLayoutButton_Click);
@@ -67,7 +67,7 @@
             this.backButton.Location = new System.Drawing.Point(308, 437);
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(246, 78);
-            this.backButton.TabIndex = 1;
+            this.backButton.TabIndex = 3;
             this.backButton.Text = "Back";
             this.backButton.UseVisualStyleBackColor = false;
             this.backButton.Click += new System.EventHandler(this.backButton_Click);
@@ -86,7 +86,8 @@
             this.nameValue.Location = new System.Drawing.Point(308, 170);
             this.nameValue.Name = "nameValue";
             this.nameValue.Size = new System.Drawing.Size(246, 45);
-            this.nameValue.TabIndex = 3;
+            this.nameValue.TabIndex = 2;
+            this.nameValue.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nameValue_KeyDown);
             // 
             // openedAppsLabel
             // 

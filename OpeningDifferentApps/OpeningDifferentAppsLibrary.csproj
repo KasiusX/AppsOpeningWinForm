@@ -43,8 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppsManager.cs" />
-    <Compile Include="FileExtensions.cs" />
-    <Compile Include="FilesWriter.cs" />
+    <Compile Include="FileWriting\FileExtensions.cs" />
+    <Compile Include="FileWriting\FilesWriter.cs" />
     <Compile Include="Models\AppModel.cs" />
     <Compile Include="Models\IIds.cs" />
     <Compile Include="Models\LayoutModel.cs" />
@@ -55,8 +55,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ValidationException.cs" />
-    <Compile Include="Validations.cs" />
+    <Compile Include="Validation\ValidationException.cs" />
+    <Compile Include="Validation\Validations.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

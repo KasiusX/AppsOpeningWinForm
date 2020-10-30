@@ -1,5 +1,6 @@
 ﻿using OpeningDifferentApps;
 using OpeningDifferentApps.Models;
+using Squirrel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,8 +22,17 @@ namespace AppsOpeningWinForm
         {
             InitializeComponent();
             SetBindings();
+
+            CheckForUpdates();
         }
 
+        private async Task CheckForUpdates()
+        {
+            using(var manager = new UpdateManager(@"D:\Data\StartingDifferentAppsData\UpdateData"))
+            {
+                await manager.UpdateApp(); 
+            }
+        }
         private void createLayoutButton_Click(object sender, EventArgs e)
         {
             NewLayoutForm form = new NewLayoutForm(manager);
@@ -39,33 +49,22 @@ namespace AppsOpeningWinForm
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                WarningMessageBox(ex.Message, "Data files opened.");
                 SetBindings();
             }
             layoutsListBox.DisplayMember = "Name";
 
             if (layoutsListBox.Items.Count != 0)
                 layoutsListBox.SetSelected(0, true);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                manager.LoadLayoutModel((LayoutModel)layoutsListBox.SelectedItem, OnlyClossedAppsCheckBox.Checked);
-            }
-            catch(Win32Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+        }       
 
         private void deleteLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            LayoutModel layoutToDelete = (LayoutModel)layoutsListBox.SelectedItem;
             if (layoutsListBox.SelectedItem == null)
                 return;
-            if (MessageBox.Show($"Delete {layoutToDelete.Name} layout?", "Delete layout", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            LayoutModel layoutToDelete = (LayoutModel)layoutsListBox.SelectedItem;
+
+            if (AskMessageBox($"Delete {layoutToDelete.Name} layout?", "Delete layout") == DialogResult.Yes)
             {
                 try
                 {
@@ -73,7 +72,7 @@ namespace AppsOpeningWinForm
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    WarningMessageBox(ex.Message, "Data files opened.");
                 }
                 SetBindings();
             }
@@ -83,11 +82,35 @@ namespace AppsOpeningWinForm
         {
             EditLayoutForm form = new EditLayoutForm(manager, (LayoutModel)layoutsListBox.SelectedItem);
             form.ShowDialog();
+            SetBindings();
         }
 
         private void closeAllAppsButton_Click(object sender, EventArgs e)
         {
+            if(AskMessageBox("Do you wonna close all apps?", "Close all apps") == DialogResult.Yes)
             manager.CloseAllVisibleProcesses();
+        }
+
+        private DialogResult AskMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        private void WarningMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        private void ErrorMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        private void layoutsListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                loadLayoutButton_Click(this, EventArgs.Empty);
+        }
+
+        private void loadLayoutButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                manager.LoadLayoutModel((LayoutModel)layoutsListBox.SelectedItem, OnlyClossedAppsCheckBox.Checked);
+            }
+            catch (Win32Exception ex)
+            {
+                ErrorMessageBox(ex.Message, "Acces denined");
+            }
         }
     }
 }

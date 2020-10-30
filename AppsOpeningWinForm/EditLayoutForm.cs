@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -83,11 +84,11 @@ namespace AppsOpeningWinForm
             }
             catch (ValidationException ex)
             {
-                MessageBox.Show(ex.Message);
+                InformationMessageBox(ex.Message, "Not valid input");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                WarningMessageBox(ex.Message, "Data files opened");
             }
         }
 
@@ -100,5 +101,8 @@ namespace AppsOpeningWinForm
             }
             return output;
         }
+
+        private void WarningMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        private void InformationMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 }
