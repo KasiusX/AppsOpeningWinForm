@@ -24,8 +24,14 @@ namespace AppsOpeningWinForm
             SetBindings();
 
             CheckForUpdates();
+
+            AddVersionNumber();
         }
 
+        private void AddVersionNumber()
+        {
+            this.Text += Application.ProductVersion;
+        }
         private async Task CheckForUpdates()
         {
             using(var manager = new UpdateManager(@"D:\Data\StartingDifferentAppsData\UpdateData"))

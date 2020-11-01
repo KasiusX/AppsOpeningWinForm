@@ -67,8 +67,10 @@
             this.layoutsListBox.HorizontalScrollbar = true;
             this.layoutsListBox.ItemHeight = 37;
             this.layoutsListBox.Location = new System.Drawing.Point(12, 39);
+            this.layoutsListBox.MaximumSize = new System.Drawing.Size(400, 450);
+            this.layoutsListBox.MinimumSize = new System.Drawing.Size(400, 450);
             this.layoutsListBox.Name = "layoutsListBox";
-            this.layoutsListBox.Size = new System.Drawing.Size(399, 448);
+            this.layoutsListBox.Size = new System.Drawing.Size(400, 448);
             this.layoutsListBox.TabIndex = 0;
             this.layoutsListBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.layoutsListBox_KeyDown);
             // 
@@ -124,7 +126,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(19F, 37F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(423, 820);
+            this.ClientSize = new System.Drawing.Size(424, 821);
             this.Controls.Add(this.OnlyClossedAppsCheckBox);
             this.Controls.Add(this.editLinkLabel);
             this.Controls.Add(this.deleteLinkLabel);
@@ -135,6 +137,8 @@
             this.Font = new System.Drawing.Font("Lucida Sans", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(10, 8, 10, 8);
+            this.MaximumSize = new System.Drawing.Size(440, 860);
+            this.MinimumSize = new System.Drawing.Size(440, 860);
             this.Name = "MainLayoutForm";
             this.Text = "Layouts";
             this.ResumeLayout(false);

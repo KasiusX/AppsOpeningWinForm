@@ -97,7 +97,7 @@ namespace OpeningDifferentApps
             foreach (Process process in processes)
             {
                 string appName = AppDomain.CurrentDomain.FriendlyName;
-                if (process.ProcessName == appName.Substring(0, appName.Length-4) || process.ProcessName == "devenv")
+                if (process.ProcessName == appName.Substring(0, appName.Length-4))
                     continue;
                 if (Debugger.IsAttached)
                 {
