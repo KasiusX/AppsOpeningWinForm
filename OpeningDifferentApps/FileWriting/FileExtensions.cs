@@ -14,7 +14,7 @@ namespace OpeningDifferentApps
 {
     internal static class FileExtensions
     {
-        private static string rootFolder = Environment.SpecialFolder.CommonApplicationData + @"\LayoutData\";
+        private static string rootFolder = Environment.SpecialFolder.LocalApplicationData + @"\LayoutData\";
         private static string appModelsFile = "AppModels.csv";
         private static string layoutsModelsFiles = "LayoutModels.csv";
 
