@@ -17,12 +17,11 @@ namespace OpeningDifferentApps
         public static List<AppModel> LoadAppModels()
         {
             string path = FileExtensions.GetRootFile().GetAppModelsFile();
-            string[] appsData;
             if (File.Exists(path))
             {
                 try
                 {
-                    appsData = File.ReadAllLines(path);
+                    return File.ReadAllLines(path).ConvertStringOnAppModels();
                 }
                 catch (IOException)
                 {
@@ -31,8 +30,6 @@ namespace OpeningDifferentApps
             }
             else
                 return new List<AppModel>();
-
-            return appsData.ConvertAppsOnModels();
         }
 
         private static void SaveAppModels(List<AppModel> apps)
@@ -43,12 +40,12 @@ namespace OpeningDifferentApps
 
             try
             {
-                using (StreamWriter writter = new StreamWriter(path))
+                using (StreamWriter writer = new StreamWriter(path))
                 {
                     foreach (string data in appData)
                     {
-                        writter.WriteLine(data);
-                    }
+                        writer.WriteLine(data);
+                    }                    
                 }
             }
             catch (IOException)
@@ -56,15 +53,15 @@ namespace OpeningDifferentApps
                 throw new Exception("Close data files.");
             }
         }
+
         public static List<LayoutModel> LoadLayoutModels()
         {
             string path = FileExtensions.GetRootFile().GetLayoutsModelsFiles();
-            string[] layoutData;
             if (File.Exists(path))
             {
                 try
                 {
-                    layoutData = File.ReadAllLines(path);
+                    return File.ReadAllLines(path).ConvertStringOnLayoutModels(LoadAppModels());
                 }
                 catch(IOException)
                 {
@@ -73,8 +70,6 @@ namespace OpeningDifferentApps
             }
             else
                 return new List<LayoutModel>();
-
-            return layoutData.ConvertLayoutsOnModels(LoadAppModels());
         }
 
         private static void SaveLayoutModels(this List<LayoutModel> layouts)
@@ -82,11 +77,7 @@ namespace OpeningDifferentApps
             string path = FileExtensions.GetRootFile().GetLayoutsModelsFiles();
             layouts.CorrectLayoutIds();
 
-            List<AppModel> allApps = new List<AppModel>();
-            foreach (LayoutModel layout in layouts)
-            {
-                allApps = allApps.Concat(layout.Apps).ToList();
-            }
+            List<AppModel> allApps = GetAllApps(layouts);            
             SaveAppModels(allApps);
 
             List<string> layoutData = layouts.ConvertLayoutsOnStrings();
@@ -106,28 +97,24 @@ namespace OpeningDifferentApps
             }
         }        
 
-        public static void SaveLayoutModel(LayoutModel layout)
+        private static List<AppModel> GetAllApps(List<LayoutModel> layouts)
         {
-            List<LayoutModel> allLayouts = LoadLayoutModels();
-            allLayouts.Add(layout);
-            allLayouts.SaveLayoutModels();
+            List<AppModel> allApps = new List<AppModel>();
+            foreach (LayoutModel layout in layouts)
+            {
+                allApps = allApps.Concat(layout.Apps).ToList();
+            }
+            return allApps;
         }
 
-        public static void DeleteLayoutModel(LayoutModel layout)
-        {            
-            List<LayoutModel> layouts = LoadLayoutModels();
-            LayoutModel layoutToDelete = layouts.Where(x => x.Id == layout.Id).First();
-            layouts.Remove(layoutToDelete);
-            layouts.SaveLayoutModels();
-        }
+        public static void SaveLayoutModel(LayoutModel layout) => LoadLayoutModels().Concat(new List<LayoutModel> { layout }).ToList().SaveLayoutModels();           
+        public static void DeleteLayoutModel(LayoutModel layout) => LoadLayoutModels().Where(x => x.Id != layout.Id).ToList().SaveLayoutModels();
 
         public static void EditLayoutModel(LayoutModel editedLayout)
         {
-            List<LayoutModel> layouts = LoadLayoutModels();
-            LayoutModel layoutToDelete = layouts.Where(x => x.Id == editedLayout.Id).First();
-            layouts.Remove(layoutToDelete);
+            List<LayoutModel> layouts = LoadLayoutModels().Where(x => x.Id != editedLayout.Id).ToList();
             layouts.Add(editedLayout);
             layouts.SaveLayoutModels();
-        }
+        }        
     }
 }

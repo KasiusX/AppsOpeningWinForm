@@ -109,13 +109,16 @@ namespace AppsOpeningWinForm
 
         private void loadLayoutButton_Click(object sender, EventArgs e)
         {
-            try
+            if (layoutsListBox.SelectedItem != null)
             {
-                manager.LoadLayoutModel((LayoutModel)layoutsListBox.SelectedItem, OnlyClossedAppsCheckBox.Checked);
-            }
-            catch (Win32Exception ex)
-            {
-                ErrorMessageBox(ex.Message, "Acces denined");
+                try
+                {
+                    manager.LoadLayoutModel((LayoutModel)layoutsListBox.SelectedItem, OnlyClossedAppsCheckBox.Checked);
+                }
+                catch (Win32Exception ex)
+                {
+                    ErrorMessageBox(ex.Message, "Acces denined");
+                }
             }
         }
     }

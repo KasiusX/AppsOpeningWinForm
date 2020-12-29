@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace OpeningDifferentApps
@@ -24,98 +25,68 @@ namespace OpeningDifferentApps
         }
         private static bool IsVisible(Process p)
         {
-            if (p.MainWindowTitle.Length >0)
-                return true;
-            else
-                return false;
+            return !String.IsNullOrEmpty(p.MainWindowTitle);
         }
 
         public static List<AppModel> ConvertProceessOnAppModel(this List<Process> processes)
         {
             List<AppModel> output = new List<AppModel>();
             foreach (Process p in processes)
-            {
-                string thisAppName = AppDomain.CurrentDomain.FriendlyName;
-                if (p.ProcessName == thisAppName.Substring(0, thisAppName.Length - 4))
-                    continue;    
-                AppModel app = new AppModel();
+            {        
                 try
                 {
-                    app.FilePath = p.MainModule.FileName;
-                    app.Name = p.ProcessName;
-                    output.Add(app);
+                    output.Add(new AppModel
+                    {
+                        FilePath = p.MainModule.FileName,
+                        Name = p.ProcessName
+                    });
                 }
                 catch(Win32Exception)
                 {
                 }
-                
             }
             return output;
         }
 
-        public static void LoadLayout(LayoutModel layout, bool onlyClosed)
-        {
-            List<Process> visibleProcesses = GetVisibleProcesses();
-            foreach (AppModel app in layout.Apps)
-            {
-                if (onlyClosed)
-                {
-                    if (visibleProcesses.Where(x => x.ProcessName == app.Name).ToList().Count == 0)
-                        StartApp(app);
-                }
-                else
-                {
-                    StartApp(app);
-                }
-            }
-        }
-
-        private static void StartApp(AppModel app)
-        {
-            try
-            {
-                Process.Start(app.FilePath);
-            }
-            catch(Win32Exception e)
-            {
-                throw new Win32Exception($"{app.Name}({e.Message})");
-            }
-        }
-
         public static void CloseAllVisibleProcesses()
         {
-            List<Process> visibleProcesses = GetVisibleProcesses().GetValidProcesses();
-            foreach (Process process in visibleProcesses)
+            List<Process> processesToClose = GetVisibleProcesses().GetClosableProcesses();
+            foreach (Process process in processesToClose)
             {
                 process.CloseMainWindow();
             }
         }
 
-        public static List<Process> GetValidProcesses(this List<Process> processes)
+        public static List<Process> GetClosableProcesses(this List<Process> processes)
+        {            
+            processes = processes.RemoveThisAppProcess();
+            if (Debugger.IsAttached)
+                processes = processes.RemoveDevelopingEnvironment();
+            return processes;
+        }
+
+        public static List<Process> RemoveThisAppProcess(this List<Process> processesToValidate)
         {
-            List<Process> output = new List<Process>();
-            foreach (Process process in processes)
-            {
-                string appName = AppDomain.CurrentDomain.FriendlyName;
-                if (process.ProcessName == appName.Substring(0, appName.Length-4))
-                    continue;
-                if (Debugger.IsAttached)
-                {
-                    string[] stayOpenInDev = { "devenv" };
-                    if (stayOpenInDev.Contains(process.ProcessName))
-                        continue;                   
-                }
-                try
-                {
-                    string fileName = process.MainModule.FileName;
-                }
-                catch (Win32Exception) 
-                {
-                    continue;
-                }
-                output.Add(process);
-            }
-            return output;
+            string thisAppName = AppDomain.CurrentDomain.FriendlyName;
+            return processesToValidate.Where(x => x.ProcessName != RemoveSuffix(thisAppName)).ToList();
+        }
+
+        private static string RemoveSuffix(string stringToEdit)
+        {
+            return stringToEdit.Substring(0, stringToEdit.Length - 4);
+        }
+
+        public static List<Process> RemoveDevelopingEnvironment(this List<Process> processesToValidate)
+        {
+            string[] stayOpenInDev = { "devenv" };
+            return processesToValidate.Where(x => !stayOpenInDev.Contains(x.ProcessName)).ToList();
+        }
+
+        public static IntPtr GetWindowByName(string processName)
+        {
+            List<Process> visibleProcesses = GetVisibleProcesses();
+            Process selectedProcess = visibleProcesses.Where(x => x.ProcessName == processName).ToList().First();
+            return selectedProcess.MainWindowHandle;
         }
     }
 }

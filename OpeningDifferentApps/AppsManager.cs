@@ -10,16 +10,15 @@ namespace OpeningDifferentApps
 {
     public class AppsManager
     {
-        Validations validations;
-        public AppsManager()
-        {
-            validations = new Validations();
-        }
+        private Validations validation = new Validations();
+        private AppsPosition appsPosition = new AppsPosition();
+        private LayoutOpening layoutOpening = new LayoutOpening();
+
         public List<AppModel> GetVisibleProcesses()
         {
             return ProcessManager.GetVisibleProcesses().ConvertProceessOnAppModel();
-        }    
-        
+        }
+
         public List<LayoutModel> GetLayoutModels()
         {
             return FilesWriter.LoadLayoutModels();
@@ -27,39 +26,44 @@ namespace OpeningDifferentApps
 
         public bool CreateNewLayoutModels(string name, List<AppModel> apps)
         {
-            bool isValid = validations.ValidateLayout(name, apps);
+            bool isValid = validation.ValidateLayout(name, apps);
             if (isValid)
             {
-                LayoutModel layout = new LayoutModel
-                {
-                    Name = name,
-                    Apps = apps
-                };
+                LayoutModel layout = PrepareLayoutModel(name, apps);
                 FilesWriter.SaveLayoutModel(layout);
-
             }
             return isValid;
         }
 
         public bool EditLayoutModel(string name, List<AppModel> apps, int id)
         {
-            bool isValid = validations.ValidateLayout(name, apps);
+            bool isValid = validation.ValidateLayout(name, apps);
             if (isValid)
             {
-                LayoutModel layout = new LayoutModel
-                {
-                    Name = name,
-                    Apps = apps,
-                    Id = id
-                };
+                LayoutModel layout = PrepareLayoutModel(name, apps, id);
                 FilesWriter.EditLayoutModel(layout);
             }
             return isValid;
         }
 
+        public LayoutModel PrepareLayoutModel(string name, List<AppModel> apps, int id = 0)
+        {
+            foreach (AppModel app in apps)
+            {
+                app.Position = appsPosition.GetAppPosition(app.Name);
+            }
+            return new LayoutModel
+            {
+                Name = name,
+                Apps = apps,
+                Id = id
+            };
+            
+        }
+
         public void LoadLayoutModel(LayoutModel layout, bool onlyClosed)
         {
-            ProcessManager.LoadLayout(layout, onlyClosed);
+            layoutOpening.LoadLayout(layout, onlyClosed);
         }
 
         public void DeleteLayoutModel(LayoutModel layout)

@@ -25,16 +25,10 @@ namespace OpeningDifferentApps
             return rootFolder;
         }
 
-        public static string GetAppModelsFile(this string root)
-        {
-            return root + appModelsFile;
-        }
-        public static string GetLayoutsModelsFiles(this string root)
-        {
-            return root + layoutsModelsFiles;
-        }
+        public static string GetAppModelsFile(this string root) => root + appModelsFile;        
+        public static string GetLayoutsModelsFiles(this string root) => root + layoutsModelsFiles;        
 
-        public static List<AppModel> ConvertAppsOnModels(this string[] appsData)
+        public static List<AppModel> ConvertStringOnAppModels(this string[] appsData)
         {
             List<AppModel> output = new List<AppModel>();
             foreach (string row in appsData)
@@ -44,7 +38,14 @@ namespace OpeningDifferentApps
                 {
                     Id = Convert.ToInt32(data[0]),
                     Name = data[1],
-                    FilePath = data[2]
+                    FilePath = data[2],
+                    Position = new Rect 
+                    {
+                        Bottom = Convert.ToInt32(data[3]),
+                        Top = Convert.ToInt32(data[4]),
+                        Left = Convert.ToInt32(data[5]),
+                        Right = Convert.ToInt32(data[6])
+                    },
                 };
                 output.Add(model);
             }
@@ -55,7 +56,7 @@ namespace OpeningDifferentApps
             List<string> output = new List<string>();
             foreach (AppModel app in appModels)
             {
-                output.Add($"{app.Id},{app.Name},{app.FilePath}");
+                output.Add(app.ToString());
             }
             return output;
         }
@@ -75,7 +76,7 @@ namespace OpeningDifferentApps
             return appModels;
         }
 
-        public static List<LayoutModel> ConvertLayoutsOnModels(this string[] layoutsData,List<AppModel> allApps)
+        public static List<LayoutModel> ConvertStringOnLayoutModels(this string[] layoutsData,List<AppModel> allApps)
         {
             List<LayoutModel> output = new List<LayoutModel>();
             foreach (string row in layoutsData)
@@ -86,24 +87,22 @@ namespace OpeningDifferentApps
                 {
                     Id = Convert.ToInt32(data[0]),
                     Name = data[1],
-                    Apps = allApps.Where(x => appIds.Contains(x.Id.ToString())).ToList()
+                    Apps = GetAppsByIds(allApps, appIds)
                 };
                 output.Add(model);
             }
             return output;
         }
+
+        private static List<AppModel> GetAppsByIds(List<AppModel> allApps, string[] appIds ) => allApps.Where(x => appIds.Contains(x.Id.ToString())).ToList();
+        
+
         public static List<string> ConvertLayoutsOnStrings(this List<LayoutModel> layoutModels)
         {
             List<string> output = new List<string>();
             foreach (LayoutModel layout in layoutModels)
             {
-                string appIds = "";
-                foreach (AppModel app in layout.Apps)
-                {
-                    appIds += $"{app.Id}|";
-                }
-                appIds = appIds.Remove(appIds.Length - 1);
-                output.Add($"{layout.Id},{layout.Name},{appIds}");
+                output.Add(layout.ToString());
             }
             return output;
         }        
@@ -121,7 +120,6 @@ namespace OpeningDifferentApps
                 }
             }
             return layoutModels;
-        }
-        
+        }        
     }
 }

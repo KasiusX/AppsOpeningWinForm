@@ -11,5 +11,17 @@ namespace OpeningDifferentApps.Models
         public int Id { get; set; }        
         public List<AppModel> Apps = new List<AppModel>();
         public string Name { get; set; }
+
+        public override string ToString()
+        {
+            string appIds = "";
+            foreach (AppModel app in Apps)
+            {
+                appIds += $"{app.Id}|";
+            }
+            appIds = appIds.Remove(appIds.Length - 1);
+
+            return $"{Id},{Name},{appIds}";
+        }
     }
 }
