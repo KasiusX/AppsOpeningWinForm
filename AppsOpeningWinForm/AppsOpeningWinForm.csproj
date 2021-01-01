@@ -138,16 +138,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpeningDifferentApps\OpeningDifferentAppsLibrary.csproj">
-      <Project>{8673f32f-f1cd-4d78-958b-16bd33c5473b}</Project>
-      <Name>OpeningDifferentAppsLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Refresh.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DefaultIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpeningDifferentApps\OpeningDifferentAppsLibrary.csproj">
+      <Project>{8673f32f-f1cd-4d78-958b-16bd33c5473b}</Project>
+      <Name>OpeningDifferentAppsLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

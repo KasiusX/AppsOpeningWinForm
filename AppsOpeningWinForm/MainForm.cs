@@ -93,8 +93,17 @@ namespace AppsOpeningWinForm
 
         private void closeAllAppsButton_Click(object sender, EventArgs e)
         {
-            if(AskMessageBox("Do you wonna close all apps?", "Close all apps") == DialogResult.Yes)
-            manager.CloseAllVisibleProcesses();
+            if (AskMessageBox("Do you wonna close all apps?", "Close all apps") == DialogResult.Yes)
+            {
+                try
+                {
+                    manager.CloseAllVisibleProcesses();
+                }
+                catch(Win32Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
         private DialogResult AskMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question);

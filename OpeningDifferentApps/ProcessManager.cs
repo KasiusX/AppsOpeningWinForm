@@ -13,6 +13,8 @@ namespace OpeningDifferentApps
 {
     internal static class ProcessManager
     {
+        [DllImport("user32.dll")]
+        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
         public static List<Process> GetVisibleProcesses()
         {
             List<Process> output = new List<Process>();
@@ -25,7 +27,12 @@ namespace OpeningDifferentApps
         }
         private static bool IsVisible(Process p)
         {
-            return !String.IsNullOrEmpty(p.MainWindowTitle);
+            //return String.IsNullOrEmpty(p.MainWindowTitle) ? false : true;
+            if (String.IsNullOrEmpty(p.MainWindowTitle))
+                return false;
+            else if (FindWindow(null, p.MainWindowTitle) == IntPtr.Zero)
+                return false;
+            return true;
         }
 
         public static List<AppModel> ConvertProceessOnAppModel(this List<Process> processes)
@@ -41,8 +48,9 @@ namespace OpeningDifferentApps
                         Name = p.ProcessName
                     });
                 }
-                catch(Win32Exception)
+                catch(Win32Exception e)
                 {
+                    
                 }
             }
             return output;
@@ -53,7 +61,19 @@ namespace OpeningDifferentApps
             List<Process> processesToClose = GetVisibleProcesses().GetClosableProcesses();
             foreach (Process process in processesToClose)
             {
-                process.CloseMainWindow();
+                try
+                {
+                    process.Kill();
+                }
+                catch(Win32Exception)
+                {
+                    Process currentProcess = process;
+                    while (!String.IsNullOrEmpty(currentProcess.MainWindowTitle))
+                    {
+                        currentProcess.CloseMainWindow();
+                        currentProcess = Process.GetProcessById(currentProcess.Id);
+                    }
+                }
             }
         }
 

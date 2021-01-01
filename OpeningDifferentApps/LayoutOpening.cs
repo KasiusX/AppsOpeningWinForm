@@ -49,7 +49,7 @@ namespace OpeningDifferentApps
             }
             catch(Win32Exception e)
             {
-                throw new Win32Exception($"{app.Name}({e.ErrorCode})");
+                throw new Win32Exception($"{app.Name}({e.Message})");
             }
         }
 

@@ -52,7 +52,7 @@
             // loadLayoutButton
             // 
             this.loadLayoutButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.loadLayoutButton.Location = new System.Drawing.Point(83, 624);
+            this.loadLayoutButton.Location = new System.Drawing.Point(83, 577);
             this.loadLayoutButton.Name = "loadLayoutButton";
             this.loadLayoutButton.Size = new System.Drawing.Size(246, 78);
             this.loadLayoutButton.TabIndex = 3;
@@ -103,7 +103,7 @@
             this.OnlyClossedAppsCheckBox.AutoSize = true;
             this.OnlyClossedAppsCheckBox.Checked = true;
             this.OnlyClossedAppsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.OnlyClossedAppsCheckBox.Location = new System.Drawing.Point(83, 577);
+            this.OnlyClossedAppsCheckBox.Location = new System.Drawing.Point(83, 661);
             this.OnlyClossedAppsCheckBox.Name = "OnlyClossedAppsCheckBox";
             this.OnlyClossedAppsCheckBox.Size = new System.Drawing.Size(300, 41);
             this.OnlyClossedAppsCheckBox.TabIndex = 2;
