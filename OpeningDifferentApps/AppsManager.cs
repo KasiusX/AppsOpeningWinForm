@@ -61,9 +61,9 @@ namespace OpeningDifferentApps
             
         }
 
-        public void LoadLayoutModel(LayoutModel layout, bool onlyClosed)
+        public void LoadLayoutModel(LoadLayoutRequest request)
         {
-            layoutOpening.LoadLayout(layout, onlyClosed);
+            layoutOpening.LoadLayout(request);
         }
 
         public void DeleteLayoutModel(LayoutModel layout)

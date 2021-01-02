@@ -18,45 +18,50 @@ namespace OpeningDifferentApps
             appsPosition = new AppsPosition();
         }
 
-        public void LoadLayout(LayoutModel layout, bool onlyClosed)
-        {            
-            if (!onlyClosed)
+        public void LoadLayout(LoadLayoutRequest request)
+        {
+            if (request.OnlyThisLayout)
+                ProcessManager.CloseAllVisibleProcesses(GetAppsNames(request.Layout.Apps));
+
+            foreach (AppModel app in request.Layout.Apps)
             {
-                foreach (AppModel app in layout.Apps)
-                {
-                    StartApp(app);
+                if (!request.OnlyClosedApps || !ProcessManager.IsAppOpen(app))
+                {                    
+                        StartApp(app);                    
                 }
-            }
-            else
-            {
-                foreach (AppModel app in layout.Apps)
+
+                if (request.MoveApps)
                 {
-                    if (!IsAppOpen(app))
+                    while (!ProcessManager.IsAppOpen(app)) { }
+                    while (!appsPosition.IsAppOnCorrectPosition(app))
                     {
-                        StartApp(app);
+                        appsPosition.SetAppPosition(app);
                     }
                 }
             }
         }
+
+        private List<string> GetAppsNames(List<AppModel> apps)
+        {
+            List<string> output = new List<string>();
+            foreach (AppModel app in apps)
+            {
+                output.Add(app.Name);
+            }
+            return output;
+        }
+
 
         private void StartApp(AppModel app)
         {
             try
             {
                 Process.Start(app.FilePath);
-                while(ProcessManager.GetVisibleProcesses().Where(x=> x.ProcessName ==app.Name).ToList().Count == 0) { }
-                appsPosition.SetAppPosition(app);
             }
             catch(Win32Exception e)
             {
                 throw new Win32Exception($"{app.Name}({e.Message})");
             }
-        }
-
-        private bool IsAppOpen(AppModel app)
-        {
-            List<Process> visibleProccesses = ProcessManager.GetVisibleProcesses();
-            return visibleProccesses.Where(x => x.ProcessName == app.Name).ToList().Count == 0 ?  false: true;            
         }
     }
 }

@@ -30,8 +30,9 @@ namespace OpeningDifferentApps
             //return String.IsNullOrEmpty(p.MainWindowTitle) ? false : true;
             if (String.IsNullOrEmpty(p.MainWindowTitle))
                 return false;
-            else if (FindWindow(null, p.MainWindowTitle) == IntPtr.Zero)
+            else if (p.MainWindowHandle == IntPtr.Zero)
                 return false;
+            
             return true;
         }
 
@@ -48,7 +49,7 @@ namespace OpeningDifferentApps
                         Name = p.ProcessName
                     });
                 }
-                catch(Win32Exception e)
+                catch(Win32Exception CanGetSartFileException)
                 {
                     
                 }
@@ -56,9 +57,13 @@ namespace OpeningDifferentApps
             return output;
         }
 
-        public static void CloseAllVisibleProcesses()
+        public static void CloseAllVisibleProcesses(List<string> ExceptionNames = null)
         {
-            List<Process> processesToClose = GetVisibleProcesses().GetClosableProcesses();
+            List<Process> processesToClose = GetVisibleProcesses().GetClosableProcesses();            
+            if(ExceptionNames != null)
+            {
+                processesToClose = processesToClose.Where(x => !ExceptionNames.Contains(x.ProcessName)).ToList();
+            }
             foreach (Process process in processesToClose)
             {
                 try
@@ -108,5 +113,12 @@ namespace OpeningDifferentApps
             Process selectedProcess = visibleProcesses.Where(x => x.ProcessName == processName).ToList().First();
             return selectedProcess.MainWindowHandle;
         }
+
+        public static bool IsAppOpen(AppModel app)
+        {
+            List<Process> visibleProccesses = GetVisibleProcesses();
+            return visibleProccesses.Where(x => x.ProcessName == app.Name).ToList().Count == 0 ? false : true;
+        }
+
     }
 }

@@ -122,7 +122,13 @@ namespace AppsOpeningWinForm
             {
                 try
                 {
-                    manager.LoadLayoutModel((LayoutModel)layoutsListBox.SelectedItem, OnlyClossedAppsCheckBox.Checked);
+                    manager.LoadLayoutModel(new LoadLayoutRequest
+                    {
+                        Layout = (LayoutModel)layoutsListBox.SelectedItem,
+                        MoveApps = moveAppsCheckbox.Checked,
+                        OnlyClosedApps = OnlyClossedAppsCheckBox.Checked,
+                        OnlyThisLayout = OnlyThisLayoutCheckbox.Checked
+                    });
                 }
                 catch (Win32Exception ex)
                 {

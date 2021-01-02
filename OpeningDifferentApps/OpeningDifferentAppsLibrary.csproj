@@ -50,6 +50,7 @@
     <Compile Include="Models\AppModel.cs" />
     <Compile Include="Models\IIds.cs" />
     <Compile Include="Models\LayoutModel.cs" />
+    <Compile Include="Models\LoadLayoutRequest.cs" />
     <Compile Include="Models\Rect.cs" />
     <Compile Include="ProcessManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -37,8 +37,14 @@ namespace OpeningDifferentApps
         
 
         private int GetAppWidth(Rect position) => position.Right - position.Left;
-        
 
-        
+
+        public bool IsAppOnCorrectPosition(AppModel app)
+        {
+            return GetAppPosition(app.Name).Equals(app.Position);
+        }
+
+
+
     }
 }
