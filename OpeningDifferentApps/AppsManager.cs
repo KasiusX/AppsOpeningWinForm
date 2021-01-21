@@ -61,9 +61,9 @@ namespace OpeningDifferentApps
             
         }
 
-        public void LoadLayoutModel(LoadLayoutRequest request)
+        public string LoadLayoutModel(LoadLayoutRequest request)
         {
-            layoutOpening.LoadLayout(request);
+            return layoutOpening.LoadLayout(request).Result;
         }
 
         public void DeleteLayoutModel(LayoutModel layout)

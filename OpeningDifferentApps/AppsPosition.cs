@@ -17,7 +17,12 @@ namespace OpeningDifferentApps
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr window);
         const uint SWP_SHOWWINDOW = 0x0040;
+        const uint SWP_NOSIZE = 0x0001;
+        const uint SWP_NOMOVE = 0x0002;
 
         public Rect GetAppPosition(string appName)
         {
@@ -27,24 +32,23 @@ namespace OpeningDifferentApps
             return position;
         }
 
-        public void SetAppPosition(AppModel app)
+        public async Task<bool> SetAppPosition(AppModel app)
         {
             IntPtr window = ProcessManager.GetWindowByName(app.Name);
-            SetWindowPos(window, IntPtr.Zero, app.Position.Left, app.Position.Top,GetAppWidth(app.Position), GetAppHeight(app.Position), SWP_SHOWWINDOW);
+            
+            SetWindowPos(window, IntPtr.Zero, app.Position.Left, app.Position.Top, GetAppWidth(app.Position), GetAppHeight(app.Position), SWP_SHOWWINDOW);
+            await Task.Delay(0);
+            return true;
         }
 
+        public void ShowWindow(AppModel app)
+        {
+            IntPtr window = ProcessManager.GetWindowByName(app.Name);
+            SetForegroundWindow(window);
+        }
         private int GetAppHeight(Rect position) => position.Bottom - position.Top;
         
 
         private int GetAppWidth(Rect position) => position.Right - position.Left;
-
-
-        public bool IsAppOnCorrectPosition(AppModel app)
-        {
-            return GetAppPosition(app.Name).Equals(app.Position);
-        }
-
-
-
     }
 }

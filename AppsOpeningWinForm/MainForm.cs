@@ -120,9 +120,10 @@ namespace AppsOpeningWinForm
         {
             if (layoutsListBox.SelectedItem != null)
             {
+                string message = "" ;
                 try
                 {
-                    manager.LoadLayoutModel(new LoadLayoutRequest
+                    message = manager.LoadLayoutModel(new LoadLayoutRequest
                     {
                         Layout = (LayoutModel)layoutsListBox.SelectedItem,
                         MoveApps = moveAppsCheckbox.Checked,
@@ -134,6 +135,7 @@ namespace AppsOpeningWinForm
                 {
                     ErrorMessageBox(ex.Message, "Acces denined");
                 }
+                MessageBox.Show(message);
             }
         }
     }
