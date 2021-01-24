@@ -32,13 +32,12 @@ namespace OpeningDifferentApps
             return position;
         }
 
-        public async Task<bool> SetAppPosition(AppModel app)
+        public void SetAppPosition(AppModel app)
         {
-            IntPtr window = ProcessManager.GetWindowByName(app.Name);
-            
+            Console.WriteLine($"Setting position of {app.Name}");
+            IntPtr window = ProcessManager.GetWindowByName(app.Name);            
             SetWindowPos(window, IntPtr.Zero, app.Position.Left, app.Position.Top, GetAppWidth(app.Position), GetAppHeight(app.Position), SWP_SHOWWINDOW);
-            await Task.Delay(0);
-            return true;
+            Console.WriteLine($"position of {app.Name} set");
         }
 
         public void ShowWindow(AppModel app)

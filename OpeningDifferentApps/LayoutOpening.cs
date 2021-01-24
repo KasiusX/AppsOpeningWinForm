@@ -21,49 +21,38 @@ namespace OpeningDifferentApps
 
         public async Task<string> LoadLayout(LoadLayoutRequest request)
         {
-            if (request.OnlyThisLayout)
-                ProcessManager.CloseAllVisibleProcesses(GetAppsNames(request.Layout.Apps));
             Console.WriteLine("__________________");
             Console.WriteLine($"New layout loading({request.Layout.Name})");
-            List<Task> layoutTasks = new List<Task>();
 
+            if (request.OnlyThisLayout)
+                ProcessManager.CloseAllVisibleProcesses(GetAppsNames(request.Layout.Apps));
+
+            List<Task> layoutTasks = new List<Task>();
             foreach (AppModel app in request.Layout.Apps)
             {
-                Console.WriteLine($"adding {app.Name}");
-                Task<AppModel> task = LoadAppAsync(request, app);
-                layoutTasks.Add(task);
-                Console.WriteLine($"{app.Name} added");
+                layoutTasks.Add(Task.Run(() => LoadApp(request, app)));
             }
+            await Task.WhenAll(layoutTasks);
 
-            while(layoutTasks.Count != 0)
-            {
-                Task finishedTask = await Task.WhenAny(layoutTasks);
-                layoutTasks.Remove(finishedTask);
-            }
             return "All done";
         }
 
-        private async Task<AppModel> LoadAppAsync(LoadLayoutRequest request, AppModel app)
+        private bool LoadApp(LoadLayoutRequest request, AppModel app)
         {
             if (!request.OnlyClosedApps || !ProcessManager.IsAppOpen(app))
-            {
-                Console.WriteLine($"starting{app.Name}");
-                await StartApp(app);
-                Console.WriteLine($"{app.Name} started");
-            }
-            Rect rec = appsPosition.GetAppPosition(app.Name);
+            {                
+                StartApp(app);                
+            }            
 
             if (request.MoveApps && !app.Position.Equals(appsPosition.GetAppPosition(app.Name)))
-            {
-                Console.WriteLine($"Setting position of {app.Name}");
-                await appsPosition.SetAppPosition(app);
-                Console.WriteLine($"position of {app.Name} set");
+            {                
+                appsPosition.SetAppPosition(app);
             }
             else
             {
                 appsPosition.ShowWindow(app);
             }
-            return app;
+            return true;
         }
 
         private List<string> GetAppsNames(List<AppModel> apps)
@@ -77,14 +66,15 @@ namespace OpeningDifferentApps
         }
 
 
-        private async Task<AppModel> StartApp(AppModel app)
+        private void StartApp(AppModel app)
         {
             try
             {
+                Console.WriteLine($"starting{app.Name}");
                 Process.Start(app.FilePath);
-                await Task.Delay(0);                
-                while (!ProcessManager.IsAppOpen(app)) { }
-                return app;
+                while (!ProcessManager.IsAppOpen(app)){}
+                Console.WriteLine($"{app.Name} started");
+
             }
             catch (Win32Exception e)
             {

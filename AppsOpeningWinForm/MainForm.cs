@@ -116,20 +116,22 @@ namespace AppsOpeningWinForm
                 loadLayoutButton_Click(this, EventArgs.Empty);
         }
 
-        private void loadLayoutButton_Click(object sender, EventArgs e)
+        private async void loadLayoutButton_Click(object sender, EventArgs e)
         {
             if (layoutsListBox.SelectedItem != null)
             {
                 string message = "" ;
+                LoadLayoutRequest request = new LoadLayoutRequest
+                {
+                    Layout = (LayoutModel)layoutsListBox.SelectedItem,
+                    MoveApps = moveAppsCheckbox.Checked,
+                    OnlyClosedApps = OnlyClossedAppsCheckBox.Checked,
+                    OnlyThisLayout = OnlyThisLayoutCheckbox.Checked
+                };
+
                 try
                 {
-                    message = manager.LoadLayoutModel(new LoadLayoutRequest
-                    {
-                        Layout = (LayoutModel)layoutsListBox.SelectedItem,
-                        MoveApps = moveAppsCheckbox.Checked,
-                        OnlyClosedApps = OnlyClossedAppsCheckBox.Checked,
-                        OnlyThisLayout = OnlyThisLayoutCheckbox.Checked
-                    });
+                    message = await Task.Run(() => manager.LoadLayoutModel(request));
                 }
                 catch (Win32Exception ex)
                 {
