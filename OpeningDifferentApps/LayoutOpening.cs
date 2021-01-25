@@ -22,7 +22,7 @@ namespace OpeningDifferentApps
         public async Task<string> LoadLayout(LoadLayoutRequest request)
         {
             Console.WriteLine("__________________");
-            Console.WriteLine($"New layout loading({request.Layout.Name})");
+            Console.WriteLine($"New layout loading({request.Layout.Name})");            
 
             if (request.OnlyThisLayout)
                 ProcessManager.CloseAllVisibleProcesses(GetAppsNames(request.Layout.Apps));
@@ -32,8 +32,8 @@ namespace OpeningDifferentApps
             {
                 layoutTasks.Add(Task.Run(() => LoadApp(request, app)));
             }
-            await Task.WhenAll(layoutTasks);
 
+            await Task.WhenAll(layoutTasks);            
             return "All done";
         }
 
@@ -44,14 +44,11 @@ namespace OpeningDifferentApps
                 StartApp(app);                
             }            
 
-            if (request.MoveApps && !app.Position.Equals(appsPosition.GetAppPosition(app.Name)))
+            if (request.MoveApps && !appsPosition.IsAppOnCorrectPosition(app))
             {                
                 appsPosition.SetAppPosition(app);
-            }
-            else
-            {
-                appsPosition.ShowWindow(app);
-            }
+            }          
+            appsPosition.ShowWindow(app);           
             return true;
         }
 
