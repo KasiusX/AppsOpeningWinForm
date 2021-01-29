@@ -112,7 +112,8 @@ namespace OpeningDifferentApps
 
         public static void EditLayoutModel(LayoutModel editedLayout)
         {
-            List<LayoutModel> layouts = LoadLayoutModels().Where(x => x.Id != editedLayout.Id).ToList();
+            List<LayoutModel> layouts = new List<LayoutModel>();
+            layouts = LoadLayoutModels().Where(x => x.Id != editedLayout.Id).ToList();
             layouts.Add(editedLayout);
             layouts.SaveLayoutModels();
         }        

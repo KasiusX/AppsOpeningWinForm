@@ -37,34 +37,15 @@ namespace OpeningDifferentApps
         public void SetAppPosition(AppModel app)
         {
             Console.WriteLine($"Setting position of {app.Name}");
-            IntPtr window = ProcessManager.GetWindowByName(app.Name);
-            if (IsFullScreen(app))
-            {
-                ShowWindow(window, 9);
-            }
+            IntPtr window = ProcessManager.GetWindowByName(app.Name);                      
+            ShowWindow(window, 9);
             SetWindowPos(window, IntPtr.Zero, app.Position.Left, app.Position.Top, app.Position.Width, app.Position.Height, SWP_SHOWWINDOW);
             Console.WriteLine($"position of {app.Name} set");
         }
 
-        private bool IsFullScreen(AppModel app)
-        {
-            Screen[] screens = Screen.AllScreens;
-            Rect position = GetAppPosition(app.Name);
-            Rectangle rec = new Rectangle(position.Left, position.Top, position.Width, position.Height);
-            foreach (Screen screen in screens)
-            {
-                if(rec.Contains(screen.Bounds))
-                {
-                    Console.WriteLine($"{app.Name} is fullscreen");
-                    return true;
-                }    
-            }
-            return false;
-        }
-
         public bool IsAppOnCorrectPosition(AppModel app) => app.Position.Equals(GetAppPosition(app.Name));                
         
-        public void ShowWindow(AppModel app)
+        public void BringWindowForward(AppModel app)
         {
             IntPtr window = ProcessManager.GetWindowByName(app.Name);
             SetForegroundWindow(window);

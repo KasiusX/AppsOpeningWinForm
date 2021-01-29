@@ -29,28 +29,36 @@ namespace OpeningDifferentApps
             bool isValid = validation.ValidateLayout(name, apps);
             if (isValid)
             {
-                LayoutModel layout = PrepareLayoutModel(name, apps);
+                LayoutModel layout = CreateLayout(name, apps);
                 FilesWriter.SaveLayoutModel(layout);
             }
             return isValid;
         }
 
-        public bool EditLayoutModel(string name, List<AppModel> apps, int id)
+        public bool EditLayoutModel(string name, List<AppModel> apps, int id, LayoutModel layoutToEdit)
         {
             bool isValid = validation.ValidateLayout(name, apps);
             if (isValid)
             {
-                LayoutModel layout = PrepareLayoutModel(name, apps, id);
+                LayoutModel layout = CreateLayout(name, apps, layoutToEdit, id);
                 FilesWriter.EditLayoutModel(layout);
             }
             return isValid;
         }
 
-        public LayoutModel PrepareLayoutModel(string name, List<AppModel> apps, int id = 0)
+        public LayoutModel CreateLayout(string name, List<AppModel> apps, LayoutModel layoutToEdit = null, int id = 0)
         {
             foreach (AppModel app in apps)
             {
-                app.Position = appsPosition.GetAppPosition(app.Name);
+                try
+                {
+                    app.Position = appsPosition.GetAppPosition(app.Name);
+                }
+                catch(Exception e)
+                {
+                    if (e.Message == "Sequence contain no elements")
+                        app.Position = layoutToEdit.Apps.Where(x => x.Name == app.Name).First().Position;
+                }
             }
             return new LayoutModel
             {
@@ -59,7 +67,7 @@ namespace OpeningDifferentApps
                 Id = id
             };
             
-        }
+        }        
 
         public string LoadLayoutModel(LoadLayoutRequest request)
         {

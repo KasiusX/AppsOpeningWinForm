@@ -48,7 +48,7 @@ namespace OpeningDifferentApps
             {                
                 appsPosition.SetAppPosition(app);
             }          
-            appsPosition.ShowWindow(app);           
+            appsPosition.BringWindowForward(app);           
             return true;
         }
 

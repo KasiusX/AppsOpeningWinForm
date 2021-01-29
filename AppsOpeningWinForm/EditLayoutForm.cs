@@ -18,12 +18,12 @@ namespace AppsOpeningWinForm
     public partial class EditLayoutForm : Form
     {
         private AppsManager manager;
-        private LayoutModel modelToEdit;
+        private LayoutModel layoutToEdit;
         public EditLayoutForm(AppsManager manager,LayoutModel layoutModelToEdit)
         {
             InitializeComponent();
             this.manager = manager;
-            modelToEdit = layoutModelToEdit;
+            layoutToEdit = layoutModelToEdit;
             SetBindings();
         }
 
@@ -33,7 +33,7 @@ namespace AppsOpeningWinForm
             aviableAppsCheckListBox.Items.AddRange(manager.GetVisibleProcesses().ToArray());
             
             aviableAppsCheckListBox.DisplayMember = "Name";
-            nameValue.Text = modelToEdit.Name;
+            nameValue.Text = layoutToEdit.Name;
 
             RemoveAppsIfInModelToEdit();
             AddModelToEditItems();
@@ -45,7 +45,7 @@ namespace AppsOpeningWinForm
             List<AppModel> appsToDelete = new List<AppModel>();
             foreach (AppModel checkBoxApp in aviableAppsCheckListBox.Items)
             {
-                List<AppModel> filteredApps = modelToEdit.Apps.Where(x => x.Name == checkBoxApp.Name).ToList();
+                List<AppModel> filteredApps = layoutToEdit.Apps.Where(x => x.Name == checkBoxApp.Name).ToList();
                 if (filteredApps.Count != 0)
                     appsToDelete.Add(checkBoxApp);
             }
@@ -57,8 +57,8 @@ namespace AppsOpeningWinForm
 
         private void AddModelToEditItems()
         {
-            aviableAppsCheckListBox.Items.AddRange(modelToEdit.Apps.ToArray());
-            foreach (AppModel app in modelToEdit.Apps)
+            aviableAppsCheckListBox.Items.AddRange(layoutToEdit.Apps.ToArray());
+            foreach (AppModel app in layoutToEdit.Apps)
             {
                 aviableAppsCheckListBox.SetItemChecked(aviableAppsCheckListBox.Items.IndexOf(app), true);
             }
@@ -79,7 +79,7 @@ namespace AppsOpeningWinForm
             List<AppModel> selectedApps = GetCheckedApps();
             try
             {
-                if (manager.EditLayoutModel(nameValue.Text, selectedApps, modelToEdit.Id))
+                if (manager.EditLayoutModel(nameValue.Text, selectedApps, layoutToEdit.Id, layoutToEdit))
                     this.Close();
             }
             catch (ValidationException ex)
