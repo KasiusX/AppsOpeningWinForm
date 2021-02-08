@@ -54,6 +54,15 @@ namespace OpeningDifferentApps
             }
         }
 
+        public static void EditAppModel(AppModel app)
+        {
+            string path = FileExtensions.GetRootFile().GetAppModelsFile();
+            List<AppModel> apps = LoadAppModels();
+            apps = apps.Where(x => x.Id != app.Id).ToList();
+            apps.Add(app);
+            SaveAppModels(apps);
+        }
+
         public static List<LayoutModel> LoadLayoutModels()
         {
             string path = FileExtensions.GetRootFile().GetLayoutsModelsFiles();

@@ -73,6 +73,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -84,18 +85,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddingApplicationManualy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddingApplicationManualy.Designer.cs">
+      <DependentUpon>AddingApplicationManualy.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditLayoutForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EditLayoutForm.Designer.cs">
       <DependentUpon>EditLayoutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LayoutLogic.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MessageBoxes.cs" />
     <Compile Include="NewLayoutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +113,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AddingApplicationManualy.resx">
+      <DependentUpon>AddingApplicationManualy.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditLayoutForm.resx">
       <DependentUpon>EditLayoutForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,19 +127,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -142,6 +154,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DefaultIcon.ico" />
+    <None Include="Resources\Plus1.png" />
+    <None Include="Resources\Plus.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpeningDifferentApps\OpeningDifferentAppsLibrary.csproj">

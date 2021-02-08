@@ -37,6 +37,7 @@
             this.editLayoutButton = new System.Windows.Forms.Button();
             this.aviableAppsCheckListBox = new System.Windows.Forms.CheckedListBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.addAppManualy = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // refreshButton
@@ -63,7 +64,7 @@
             // 
             // nameValue
             // 
-            this.nameValue.Location = new System.Drawing.Point(308, 169);
+            this.nameValue.Location = new System.Drawing.Point(358, 169);
             this.nameValue.MaxLength = 30;
             this.nameValue.Name = "nameValue";
             this.nameValue.Size = new System.Drawing.Size(246, 45);
@@ -72,7 +73,7 @@
             // nameLabel
             // 
             this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(301, 129);
+            this.nameLabel.Location = new System.Drawing.Point(351, 129);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(116, 37);
             this.nameLabel.TabIndex = 9;
@@ -81,7 +82,7 @@
             // backButton
             // 
             this.backButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.backButton.Location = new System.Drawing.Point(308, 436);
+            this.backButton.Location = new System.Drawing.Point(358, 436);
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(246, 78);
             this.backButton.TabIndex = 3;
@@ -92,7 +93,7 @@
             // editLayoutButton
             // 
             this.editLayoutButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.editLayoutButton.Location = new System.Drawing.Point(308, 520);
+            this.editLayoutButton.Location = new System.Drawing.Point(358, 520);
             this.editLayoutButton.Name = "editLayoutButton";
             this.editLayoutButton.Size = new System.Drawing.Size(246, 78);
             this.editLayoutButton.TabIndex = 4;
@@ -108,7 +109,7 @@
             this.aviableAppsCheckListBox.HorizontalScrollbar = true;
             this.aviableAppsCheckListBox.Location = new System.Drawing.Point(12, 129);
             this.aviableAppsCheckListBox.Name = "aviableAppsCheckListBox";
-            this.aviableAppsCheckListBox.Size = new System.Drawing.Size(274, 469);
+            this.aviableAppsCheckListBox.Size = new System.Drawing.Size(326, 469);
             this.aviableAppsCheckListBox.TabIndex = 0;
             // 
             // label1
@@ -121,13 +122,27 @@
             this.label1.TabIndex = 12;
             this.label1.Text = "Edit layout";
             // 
+            // addAppManualy
+            // 
+            this.addAppManualy.BackColor = System.Drawing.Color.White;
+            this.addAppManualy.BackgroundImage = global::AppsOpeningWinForm.Properties.Resources.Plus1;
+            this.addAppManualy.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.addAppManualy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addAppManualy.Location = new System.Drawing.Point(292, 89);
+            this.addAppManualy.Name = "addAppManualy";
+            this.addAppManualy.Size = new System.Drawing.Size(46, 37);
+            this.addAppManualy.TabIndex = 1;
+            this.addAppManualy.UseVisualStyleBackColor = false;
+            this.addAppManualy.Click += new System.EventHandler(this.addAppManualy_Click);
+            // 
             // EditLayoutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(19F, 37F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(584, 636);
+            this.ClientSize = new System.Drawing.Size(634, 638);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.addAppManualy);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.openedAppsLabel);
             this.Controls.Add(this.nameValue);
@@ -138,8 +153,6 @@
             this.Font = new System.Drawing.Font("Lucida Sans", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(10, 9, 10, 9);
-            this.MaximumSize = new System.Drawing.Size(600, 675);
-            this.MinimumSize = new System.Drawing.Size(600, 675);
             this.Name = "EditLayoutForm";
             this.Text = "Edit layout";
             this.ResumeLayout(false);
@@ -157,5 +170,6 @@
         private System.Windows.Forms.Button editLayoutButton;
         private System.Windows.Forms.CheckedListBox aviableAppsCheckListBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button addAppManualy;
     }
 }

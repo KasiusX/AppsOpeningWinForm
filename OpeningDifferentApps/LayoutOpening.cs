@@ -43,7 +43,11 @@ namespace OpeningDifferentApps
             {                
                 StartApp(app);                
             }            
-
+            if(IsPositionZero(app))
+            {
+                app.Position = appsPosition.GetAppPosition(app.Name);
+                FilesWriter.EditAppModel(app);
+            }
             if (request.MoveApps && !appsPosition.IsAppOnCorrectPosition(app))
             {                
                 appsPosition.SetAppPosition(app);
@@ -77,6 +81,12 @@ namespace OpeningDifferentApps
             {
                 throw new Win32Exception($"{app.Name}({e.Message})");
             }
+        }
+
+        private bool IsPositionZero(AppModel app)
+        {
+
+            return app.Position.Left == 0 && app.Position.Right == 0 && app.Position.Top == 0 && app.Position.Bottom == 0;
         }
     }
 }

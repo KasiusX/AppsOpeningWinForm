@@ -1,4 +1,5 @@
-﻿using OpeningDifferentApps;
+﻿
+using OpeningDifferentApps;
 using OpeningDifferentApps.Models;
 using System;
 using System.Collections.Generic;
@@ -14,52 +15,49 @@ using System.Windows.Forms;
 
 namespace AppsOpeningWinForm
 {
-    public partial class NewLayoutForm : Form
+    public partial class NewLayoutForm : Form, IAppModelRequestor
     {
         private AppsManager manager;
+        List<AppModel> manuallyAddedApps = new List<AppModel>();
+        private LayoutLogic logic;
         public NewLayoutForm(AppsManager manager)
         {
             InitializeComponent();
+            logic = new LayoutLogic(manager);
             this.manager = manager;
             SetBindings();
         }
 
         private void createLayoutButton_Click(object sender, EventArgs e)
         {
-            List<AppModel> selectedApps = GetCheckedApps();
+            List<AppModel> selectedApps = logic.GetCheckedApps(aviableAppsCheckListBox);
             try
             {
                 if (manager.CreateNewLayoutModels(nameValue.Text, selectedApps))
-                {
-                    SetBindings();
+                {                    
                     Close();
                 }
             }
             catch(ValidationException ex)
             {
-                InformationMessageBox(ex.Message, "Not valid input");
+                MessageBoxes.InformationMessageBox(ex.Message, "Not valid input");
             }
             catch(Exception ex) 
             {
-                WarningMessageBox(ex.Message, "Data files opened");
+                MessageBoxes.WarningMessageBox(ex.Message, "Data files opened!");
             }
         }
-        private List<AppModel> GetCheckedApps()
-        {
-            List<AppModel> output = new List<AppModel>();
-            foreach (var app in aviableAppsCheckListBox.CheckedItems)
-            {
-                output.Add((AppModel)app);
-            }
-            return output;
-        }
+        
+
         private void SetBindings()
         {
-            aviableAppsCheckListBox.Items.Clear();
-            aviableAppsCheckListBox.Items.AddRange(manager.GetVisibleProcesses().ToArray());
+            logic.AddVisibleApps(aviableAppsCheckListBox);
+
+            logic.AddManuallyAddedApps(aviableAppsCheckListBox,manuallyAddedApps);
+
             aviableAppsCheckListBox.DisplayMember = "Name";
             nameValue.Text = "";
-        }        
+        }
 
         private void backButton_Click(object sender, EventArgs e)
         {
@@ -69,10 +67,7 @@ namespace AppsOpeningWinForm
         private void refreshButton_Click(object sender, EventArgs e)
         {
             SetBindings();
-        }
-
-        private void WarningMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        private void InformationMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }        
 
         private void nameValue_KeyDown(object sender, KeyEventArgs e)
         {
@@ -80,6 +75,16 @@ namespace AppsOpeningWinForm
                 createLayoutButton_Click(this, EventArgs.Empty);
         }
 
-        
+        private void addAppManualyButton_Click(object sender, EventArgs e)
+        {
+            AddingApplicationManualy form = new AddingApplicationManualy(this);
+            form.ShowDialog();
+        }
+
+        public void AddApplication(AppModel app)
+        {
+            manuallyAddedApps.Add(app);
+            SetBindings();
+        }              
     }
 }

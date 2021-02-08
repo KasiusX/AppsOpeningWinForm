@@ -55,9 +55,10 @@ namespace AppsOpeningWinForm
             }
             catch(Exception ex)
             {
-                WarningMessageBox(ex.Message, "Data files opened.");
+                MessageBoxes.WarningMessageBox(ex.Message, "Data files opened.");
                 SetBindings();
             }
+
             layoutsListBox.DisplayMember = "Name";
 
             if (layoutsListBox.Items.Count != 0)
@@ -70,7 +71,7 @@ namespace AppsOpeningWinForm
                 return;
             LayoutModel layoutToDelete = (LayoutModel)layoutsListBox.SelectedItem;
 
-            if (AskMessageBox($"Delete {layoutToDelete.Name} layout?", "Delete layout") == DialogResult.Yes)
+            if (MessageBoxes.AskMessageBox($"Delete {layoutToDelete.Name} layout?", "Delete layout") == DialogResult.Yes)
             {
                 try
                 {
@@ -78,7 +79,7 @@ namespace AppsOpeningWinForm
                 }
                 catch(Exception ex)
                 {
-                    WarningMessageBox(ex.Message, "Data files opened.");
+                    MessageBoxes.WarningMessageBox(ex.Message, "Data files opened.");
                 }
                 SetBindings();
             }
@@ -93,7 +94,7 @@ namespace AppsOpeningWinForm
 
         private void closeAllAppsButton_Click(object sender, EventArgs e)
         {
-            if (AskMessageBox("Do you wonna close all apps?", "Close all apps") == DialogResult.Yes)
+            if (MessageBoxes.AskMessageBox("Do you wonna close all apps?", "Close all apps") == DialogResult.Yes)
             {
                 try
                 {
@@ -104,11 +105,7 @@ namespace AppsOpeningWinForm
                     MessageBox.Show(ex.Message);
                 }
             }
-        }
-
-        private DialogResult AskMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-        private void WarningMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        private void ErrorMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }        
 
         private void layoutsListBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -135,7 +132,7 @@ namespace AppsOpeningWinForm
                 }
                 catch (Win32Exception ex)
                 {
-                    ErrorMessageBox(ex.Message, "Acces denined");
+                    MessageBoxes.ErrorMessageBox(ex.Message, "Acces denined");
                 }
                 MessageBox.Show(message);
             }

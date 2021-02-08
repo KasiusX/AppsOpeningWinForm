@@ -49,6 +49,7 @@
     <Compile Include="FileWriting\FilesWriter.cs" />
     <Compile Include="LayoutOpening.cs" />
     <Compile Include="Models\AppModel.cs" />
+    <Compile Include="Models\IAppModelRequestor.cs" />
     <Compile Include="Models\IIds.cs" />
     <Compile Include="Models\LayoutModel.cs" />
     <Compile Include="Models\LoadLayoutRequest.cs" />

@@ -15,13 +15,16 @@ using System.Windows.Forms;
 
 namespace AppsOpeningWinForm
 {
-    public partial class EditLayoutForm : Form
+    public partial class EditLayoutForm : Form, IAppModelRequestor
     {
         private AppsManager manager;
         private LayoutModel layoutToEdit;
-        public EditLayoutForm(AppsManager manager,LayoutModel layoutModelToEdit)
+        private List<AppModel> manuallyAddedApps = new List<AppModel>();
+        private LayoutLogic logic;
+        public EditLayoutForm(AppsManager manager, LayoutModel layoutModelToEdit)
         {
             InitializeComponent();
+            logic = new LayoutLogic(manager);
             this.manager = manager;
             layoutToEdit = layoutModelToEdit;
             SetBindings();
@@ -29,40 +32,56 @@ namespace AppsOpeningWinForm
 
         private void SetBindings()
         {
-            aviableAppsCheckListBox.Items.Clear();
-            aviableAppsCheckListBox.Items.AddRange(manager.GetVisibleProcesses().ToArray());
-            
+            logic.AddVisibleApps(aviableAppsCheckListBox);
+
+            logic.AddManuallyAddedApps(aviableAppsCheckListBox, manuallyAddedApps);
+
             aviableAppsCheckListBox.DisplayMember = "Name";
             nameValue.Text = layoutToEdit.Name;
 
-            RemoveAppsIfInModelToEdit();
-            AddModelToEditItems();
-        }
+            AddAppModelsFromModelToEdit();
+        } 
 
-        
+        private void AddAppModelsFromModelToEdit()
+        {
+            RemoveAppsIfInModelToEdit();
+
+            aviableAppsCheckListBox.Items.AddRange(layoutToEdit.Apps.OrderBy(x => x.Name).ToArray());            
+            foreach (AppModel app in layoutToEdit.Apps)
+            {
+                int index = aviableAppsCheckListBox.Items.IndexOf(app);
+                aviableAppsCheckListBox.SetItemChecked(index, true);
+            }
+        }
         private void RemoveAppsIfInModelToEdit()
         {
-            List<AppModel> appsToDelete = new List<AppModel>();
+            List<AppModel> appsToRemove = new List<AppModel>();
+
             foreach (AppModel checkBoxApp in aviableAppsCheckListBox.Items)
             {
-                List<AppModel> filteredApps = layoutToEdit.Apps.Where(x => x.Name == checkBoxApp.Name).ToList();
-                if (filteredApps.Count != 0)
-                    appsToDelete.Add(checkBoxApp);
+                if (IsAppInModelToEdit(checkBoxApp))
+                    appsToRemove.Add(checkBoxApp);
             }
-            foreach (AppModel appToDelete  in appsToDelete)
+
+            RemoveAppsFromCheckList(appsToRemove);
+        }
+
+        private bool IsAppInModelToEdit(AppModel app)
+        {
+            List<AppModel> filteredApps = layoutToEdit.Apps.Where(x => x.Name == app.Name).ToList();
+            if (filteredApps.Count != 0)
+                return true;
+            return false;
+        }
+
+        private void RemoveAppsFromCheckList(List<AppModel> appsToRemove)
+        {
+            foreach (AppModel appToDelete in appsToRemove)
             {
                 aviableAppsCheckListBox.Items.Remove(appToDelete);
             }
         }
 
-        private void AddModelToEditItems()
-        {
-            aviableAppsCheckListBox.Items.AddRange(layoutToEdit.Apps.ToArray());
-            foreach (AppModel app in layoutToEdit.Apps)
-            {
-                aviableAppsCheckListBox.SetItemChecked(aviableAppsCheckListBox.Items.IndexOf(app), true);
-            }
-        }
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
@@ -76,7 +95,7 @@ namespace AppsOpeningWinForm
 
         private void editLayoutButton_Click(object sender, EventArgs e)
         {
-            List<AppModel> selectedApps = GetCheckedApps();
+            List<AppModel> selectedApps = logic.GetCheckedApps(aviableAppsCheckListBox);
             try
             {
                 if (manager.EditLayoutModel(nameValue.Text, selectedApps, layoutToEdit.Id, layoutToEdit))
@@ -84,25 +103,24 @@ namespace AppsOpeningWinForm
             }
             catch (ValidationException ex)
             {
-                InformationMessageBox(ex.Message, "Not valid input");
+                MessageBoxes.InformationMessageBox(ex.Message, "Not valid input");
             }
             catch (Exception ex)
             {
-                WarningMessageBox(ex.Message, "Data files opened");
+                MessageBoxes.WarningMessageBox(ex.Message, "Data files opened");
             }
-        }
+        }     
 
-        private List<AppModel> GetCheckedApps()
+        private void addAppManualy_Click(object sender, EventArgs e)
         {
-            List<AppModel> output = new List<AppModel>();
-            foreach (var app in aviableAppsCheckListBox.CheckedItems)
-            {
-                output.Add((AppModel)app);
-            }
-            return output;
+            AddingApplicationManualy form = new AddingApplicationManualy(this);
+            form.ShowDialog();
         }
 
-        private void WarningMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        private void InformationMessageBox(string message, string title) => MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        public void AddApplication(AppModel app)
+        {
+            manuallyAddedApps.Add(app);
+            SetBindings();
+        }
     }
 }

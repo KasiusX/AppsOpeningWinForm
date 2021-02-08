@@ -14,7 +14,7 @@ namespace OpeningDifferentApps
         private AppsPosition appsPosition = new AppsPosition();
         private LayoutOpening layoutOpening = new LayoutOpening();
 
-        public List<AppModel> GetVisibleProcesses()
+        public List<AppModel> GetVisibleApps()
         {
             return ProcessManager.GetVisibleProcesses().ConvertProceessOnAppModel();
         }
