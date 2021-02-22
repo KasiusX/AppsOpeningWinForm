@@ -25,7 +25,7 @@ namespace OpeningDifferentApps
                 }
                 catch (IOException)
                 {
-                    throw new Exception("Close data files.");
+                    throw new IOException("Close data files.");
                 }
             }
             else
@@ -50,7 +50,7 @@ namespace OpeningDifferentApps
             }
             catch (IOException)
             {
-                throw new Exception("Close data files.");
+                throw new IOException("Close data files.");
             }
         }
 
@@ -74,7 +74,7 @@ namespace OpeningDifferentApps
                 }
                 catch(IOException)
                 {
-                    throw new Exception("Close data files.");
+                    throw new IOException("Close data files.");
                 }
             }
             else
@@ -102,7 +102,7 @@ namespace OpeningDifferentApps
             }
             catch(IOException)
             {
-                throw new Exception("Close data files");
+                throw new IOException("Close data files");
             }
         }        
 

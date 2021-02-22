@@ -22,7 +22,7 @@ namespace OpeningDifferentApps
         private static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumDelegate lpEnumCallbackFunction, IntPtr lParam);
         private delegate bool EnumDelegate(IntPtr hWnd, int lParam);
 
-        private static List<IntPtr> VisibleWindows = new List<IntPtr>();
+        private static List<IntPtr> VisibleWindows = new List<IntPtr>();        
 
         public static List<ListBoxAppModel> GetAllWindows()
         {
@@ -33,30 +33,44 @@ namespace OpeningDifferentApps
             List<Process> visibleProcesses = ProcessManager.GetVisibleProcesses();
             foreach (IntPtr window in VisibleWindows)
             {
-                Console.WriteLine("________");
-                Console.WriteLine($"making handle:{window}");
-                ProcessManager.GetStartingFileAndName(window, visibleProcesses, out string startingFile, out string name);
-
-                if (name != null || startingFile != null)
+                if (FilterWindow(window, visibleProcesses, out string startingFile, out string name))
                 {
-                    Console.WriteLine("Making appModel");
-                    AppModel app = new AppModel
-                    {
-                        FilePath = startingFile,
-                        Name = name,
-                        Position = AppsPosition.GetAppPosition(window)
-                    };
-
                     visibleApps.Add(new ListBoxAppModel
                     {
-                        App = app,
+                        App = CreateAppModel(startingFile, name, window),
                         Title = GetWindowText(window)
                     });
                 }
-                Console.WriteLine();
             }
             Console.WriteLine("Everything done");
             return visibleApps;
+        }
+
+        private static bool FilterWindow(IntPtr window,List<Process> visibleProcesses,out string startingFile, out string name)
+        {
+            Console.WriteLine("________");
+            Console.WriteLine($"making handle:{window}");
+            ProcessManager.GetStartingFileAndName(window, visibleProcesses, out startingFile, out name);
+
+            if (name != null || startingFile != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static AppModel CreateAppModel(string startingFile, string name, IntPtr window)
+        {
+            Console.WriteLine("Making appModel");
+            return new AppModel
+            {
+                FilePath = startingFile,
+                Name = name,
+                Position = AppsPosition.GetAppPosition(window)
+            };
         }
 
         private static void GetHandles()

@@ -28,8 +28,11 @@ namespace OpeningDifferentApps
             bool isValid = validation.ValidateLayout(name, apps);
             if (isValid)
             {
-                LayoutModel layout = CreateLayout(name, apps);
-                FilesWriter.SaveLayoutModel(layout);
+                FilesWriter.SaveLayoutModel(new LayoutModel
+                {
+                    Name = name,
+                    Apps = apps
+                });
             }
             return isValid;
         }
@@ -39,35 +42,15 @@ namespace OpeningDifferentApps
             bool isValid = validation.ValidateLayout(name, apps);
             if (isValid)
             {
-                LayoutModel layout = CreateLayout(name, apps, layoutToEdit, id);
-                FilesWriter.EditLayoutModel(layout);
+                FilesWriter.EditLayoutModel(new LayoutModel
+                {
+                    Name = name,
+                    Apps = apps,
+                    Id = id
+                });
             }
             return isValid;
         }
-
-        public LayoutModel CreateLayout(string name, List<AppModel> apps, LayoutModel layoutToEdit = null, int id = 0)
-        {
-            foreach (AppModel app in apps)
-            {
-                try
-                {
-                    app.Position = AppsPosition.GetAppPosition(app.Name);
-                }
-                catch(Exception e)
-                {
-                    if (e.Message == "Sequence contain no elements")
-                        app.Position = layoutToEdit.Apps.Where(x => x.Name == app.Name).First().Position;
-                }
-            }
-            return new LayoutModel
-            {
-                Name = name,
-                Apps = apps,
-                Id = id
-            };
-            
-        }        
-
         public string LoadLayoutModel(LoadLayoutRequest request)
         {
             return layoutOpening.LoadLayout(request).Result;

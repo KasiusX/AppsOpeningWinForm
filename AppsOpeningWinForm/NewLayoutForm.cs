@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -42,9 +43,9 @@ namespace AppsOpeningWinForm
             {
                 MessageBoxes.InformationMessageBox(ex.Message, "Not valid input");
             }
-            catch(Exception ex) 
+            catch (IOException IOe)
             {
-                MessageBoxes.WarningMessageBox(ex.Message, "Data files opened!");
+                MessageBoxes.WarningMessageBox(IOe.Message, "Data files opened!");
             }
         }
         
@@ -84,6 +85,6 @@ namespace AppsOpeningWinForm
         {
             manuallyAddedApps.Add(app);
             SetBindings();
-        }              
+        }
     }
 }

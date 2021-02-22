@@ -45,7 +45,8 @@ namespace AppsOpeningWinForm
             List<AppModel> checkedApps = new List<AppModel>();
             foreach (var app in checkedListBox.CheckedItems)
             {
-                checkedApps.Add((AppModel)app);
+                ListBoxAppModel selectedItem = (ListBoxAppModel)app;
+                checkedApps.Add(selectedItem.App);
             }
             return checkedApps;
         }

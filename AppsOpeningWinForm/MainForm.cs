@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -53,10 +54,9 @@ namespace AppsOpeningWinForm
             {
                 layoutsListBox.Items.AddRange(manager.GetLayoutModels().OrderBy(x => x.Name).ToArray());
             }
-            catch(Exception ex)
+            catch (IOException e)
             {
-                MessageBoxes.WarningMessageBox(ex.Message, "Data files opened.");
-                SetBindings();
+                MessageBoxes.WarningMessageBox(e.Message, "Data files opened!");
             }
 
             layoutsListBox.DisplayMember = "Name";
