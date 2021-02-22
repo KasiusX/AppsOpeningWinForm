@@ -49,10 +49,9 @@ namespace AppsOpeningWinForm
         }
         
 
-        private void SetBindings()
+        private async void SetBindings()
         {
             logic.AddVisibleApps(aviableAppsCheckListBox);
-
             logic.AddManuallyAddedApps(aviableAppsCheckListBox,manuallyAddedApps);
 
             aviableAppsCheckListBox.DisplayMember = "Name";

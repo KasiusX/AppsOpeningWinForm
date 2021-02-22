@@ -87,9 +87,12 @@ namespace AppsOpeningWinForm
 
         private void editLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            EditLayoutForm form = new EditLayoutForm(manager, (LayoutModel)layoutsListBox.SelectedItem);
-            form.ShowDialog();
-            SetBindings();
+            if (layoutsListBox.SelectedItem != null)
+            {
+                EditLayoutForm form = new EditLayoutForm(manager, (LayoutModel)layoutsListBox.SelectedItem);
+                form.ShowDialog();
+                SetBindings();
+            }
         }
 
         private void closeAllAppsButton_Click(object sender, EventArgs e)

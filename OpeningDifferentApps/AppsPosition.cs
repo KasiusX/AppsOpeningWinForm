@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace OpeningDifferentApps
 {
-    internal class AppsPosition
+    static internal class AppsPosition
     {        
         [DllImport("user32.dll")]
         private static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
@@ -26,15 +26,20 @@ namespace OpeningDifferentApps
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        public Rect GetAppPosition(string appName)
+        public static Rect GetAppPosition(string appName)
+        {
+            IntPtr window = ProcessManager.GetWindowByName(appName);            
+            return GetAppPosition(window);
+        }
+
+        public static Rect GetAppPosition(IntPtr window)
         {
             Rect position = new Rect();
-            IntPtr window = ProcessManager.GetWindowByName(appName);
             GetWindowRect(window, ref position);
             return position;
         }
 
-        public void SetAppPosition(AppModel app)
+        public static void SetAppPosition(AppModel app)
         {
             Console.WriteLine($"Setting position of {app.Name}");
             IntPtr window = ProcessManager.GetWindowByName(app.Name);                      
@@ -43,9 +48,9 @@ namespace OpeningDifferentApps
             Console.WriteLine($"position of {app.Name} set");
         }
 
-        public bool IsAppOnCorrectPosition(AppModel app) => app.Position.Equals(GetAppPosition(app.Name));                
+        public static bool IsAppOnCorrectPosition(AppModel app) => app.Position.Equals(GetAppPosition(app.Name));                
         
-        public void BringWindowForward(AppModel app)
+        public static void BringWindowForward(AppModel app)
         {
             IntPtr window = ProcessManager.GetWindowByName(app.Name);
             SetForegroundWindow(window);

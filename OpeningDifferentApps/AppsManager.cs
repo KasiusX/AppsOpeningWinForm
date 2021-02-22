@@ -10,13 +10,12 @@ namespace OpeningDifferentApps
 {
     public class AppsManager
     {
-        private Validations validation = new Validations();
-        private AppsPosition appsPosition = new AppsPosition();
+        private Validations validation = new Validations();        
         private LayoutOpening layoutOpening = new LayoutOpening();
 
-        public List<AppModel> GetVisibleApps()
+        public List<ListBoxAppModel> GetVisibleApps()
         {
-            return ProcessManager.GetVisibleProcesses().ConvertProceessOnAppModel();
+            return WindowsManager.GetAllWindows();
         }
 
         public List<LayoutModel> GetLayoutModels()
@@ -52,7 +51,7 @@ namespace OpeningDifferentApps
             {
                 try
                 {
-                    app.Position = appsPosition.GetAppPosition(app.Name);
+                    app.Position = AppsPosition.GetAppPosition(app.Name);
                 }
                 catch(Exception e)
                 {

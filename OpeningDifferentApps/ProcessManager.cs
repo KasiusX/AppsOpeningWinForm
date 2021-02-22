@@ -15,6 +15,8 @@ namespace OpeningDifferentApps
     {
         [DllImport("user32.dll")]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("user32.dll")]
+        static extern uint GetWindowThreadProcessId(IntPtr window, out int id);
         public static List<Process> GetVisibleProcesses()
         {
             List<Process> output = new List<Process>();
@@ -55,6 +57,49 @@ namespace OpeningDifferentApps
                 }
             }
             return output;
+        }
+
+        public static void GetStartingFileAndName(IntPtr window,List<Process> visibleProcesses,
+            out string path,
+            out string name)
+        {
+            int id;
+            GetWindowThreadProcessId(window, out id);
+            Process p = GetProcessFromVisibleProcesses(id, visibleProcesses);
+
+            if(p == null)
+            {
+                path = null;
+                name = null;
+                return;
+            }
+            
+
+            try
+            {
+                path = p.MainModule.FileName;
+                name = p.ProcessName;
+            }
+            catch (Win32Exception e)
+            {
+                Console.WriteLine(e.Message +$"({p.ProcessName})");
+                path = null;
+                name = null;
+                return;
+            }
+            
+        }
+
+        private static Process GetProcessFromVisibleProcesses(int id,List<Process> visibleProcesses)
+        {
+            try
+            {
+                return visibleProcesses.Where(x => x.Id == id).First();
+            }
+            catch (InvalidOperationException)
+            {                
+                return null;
+            }
         }
 
         public static void CloseAllVisibleProcesses(List<string> ExceptionNames = null)

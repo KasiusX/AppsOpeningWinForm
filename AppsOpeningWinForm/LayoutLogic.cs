@@ -18,10 +18,12 @@ namespace AppsOpeningWinForm
             this.manager = manager;
         }
 
-        public void AddVisibleApps(CheckedListBox checkedListBox)
+        public async void AddVisibleApps(CheckedListBox checkedListBox)
         {
             checkedListBox.Items.Clear();
-            checkedListBox.Items.AddRange(manager.GetVisibleApps().OrderBy(x => x.Name).ToArray());
+            List<ListBoxAppModel> visibleApps = new List<ListBoxAppModel>();
+            await Task.Run(() => visibleApps = manager.GetVisibleApps());
+            checkedListBox.Items.AddRange(visibleApps.OrderBy(x => x.App.Name).ToArray());
         }
 
         public void AddManuallyAddedApps(CheckedListBox checkedListBox, List<AppModel> manuallyAddedApps)

@@ -52,6 +52,7 @@
     <Compile Include="Models\IAppModelRequestor.cs" />
     <Compile Include="Models\IIds.cs" />
     <Compile Include="Models\LayoutModel.cs" />
+    <Compile Include="Models\ListBoxAppModel.cs" />
     <Compile Include="Models\LoadLayoutRequest.cs" />
     <Compile Include="Models\Rect.cs" />
     <Compile Include="ProcessManager.cs" />
@@ -63,6 +64,7 @@
     </Compile>
     <Compile Include="Validation\ValidationException.cs" />
     <Compile Include="Validation\Validations.cs" />
+    <Compile Include="WindowsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

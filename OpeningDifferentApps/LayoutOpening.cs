@@ -12,13 +12,6 @@ namespace OpeningDifferentApps
 {
     internal class LayoutOpening
     {
-        private AppsPosition appsPosition;
-
-        public LayoutOpening()
-        {
-            appsPosition = new AppsPosition();
-        }
-
         public async Task<string> LoadLayout(LoadLayoutRequest request)
         {
             Console.WriteLine("__________________");
@@ -45,14 +38,14 @@ namespace OpeningDifferentApps
             }            
             if(IsPositionZero(app))
             {
-                app.Position = appsPosition.GetAppPosition(app.Name);
+                app.Position = AppsPosition.GetAppPosition(app.Name);
                 FilesWriter.EditAppModel(app);
             }
-            if (request.MoveApps && !appsPosition.IsAppOnCorrectPosition(app))
-            {                
-                appsPosition.SetAppPosition(app);
-            }          
-            appsPosition.BringWindowForward(app);           
+            if (request.MoveApps && !AppsPosition.IsAppOnCorrectPosition(app))
+            {
+                AppsPosition.SetAppPosition(app);
+            }
+            AppsPosition.BringWindowForward(app);           
             return true;
         }
 
