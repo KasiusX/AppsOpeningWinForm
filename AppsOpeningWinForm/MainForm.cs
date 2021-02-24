@@ -126,6 +126,7 @@ namespace AppsOpeningWinForm
 
         private async Task<string> LoadLayout()
         {
+            string message = "";
             if (layoutsListBox.SelectedItem != null)
             {
                 LoadLayoutRequest request = new LoadLayoutRequest
@@ -138,14 +139,14 @@ namespace AppsOpeningWinForm
 
                 try
                 {
-                    return await Task.Run(() => manager.LoadLayoutModel(request));
+                    message = Task.Run(() => message = manager.LoadLayoutModel(request)).Result;
                 }
                 catch (Win32Exception ex)
                 {
                     MessageBoxes.ErrorMessageBox(ex.Message, "Acces denined");                    
                 }
             }
-            return "";
+            return message;
         }
     }
 }
