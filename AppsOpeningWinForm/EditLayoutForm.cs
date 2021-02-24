@@ -32,55 +32,38 @@ namespace AppsOpeningWinForm
 
         private async void SetBindings()
         {
-            logic.AddVisibleApps(aviableAppsCheckListBox);
+            await logic.AddVisibleApps(aviableAppsCheckListBox);
             logic.AddManuallyAddedApps(aviableAppsCheckListBox, manuallyAddedApps);
 
             aviableAppsCheckListBox.DisplayMember = "Name";
             nameValue.Text = layoutToEdit.Name;
 
-            AddAppModelsFromModelToEdit();
+            CheckAppsFromLayoutToEdit();
         } 
 
-        private void AddAppModelsFromModelToEdit()
-        {
-            RemoveAppsIfInModelToEdit();
-
-            aviableAppsCheckListBox.Items.AddRange(layoutToEdit.Apps.OrderBy(x => x.Name).ToArray());            
+        private void CheckAppsFromLayoutToEdit()
+        {              
             foreach (AppModel app in layoutToEdit.Apps)
             {
-                int index = aviableAppsCheckListBox.Items.IndexOf(app);
-                aviableAppsCheckListBox.SetItemChecked(index, true);
+                CheckApp(app);
             }
         }
-        private void RemoveAppsIfInModelToEdit()
-        {
-            List<AppModel> appsToRemove = new List<AppModel>();
 
-            foreach (AppModel checkBoxApp in aviableAppsCheckListBox.Items)
+        private void CheckApp(AppModel app)
+        {
+            int index = GetAppIndexFromListBox(app);
+            aviableAppsCheckListBox.SetItemChecked(index, true);
+        }
+
+        private int GetAppIndexFromListBox(AppModel app)
+        {
+            foreach (ListBoxAppModel item in aviableAppsCheckListBox.Items)
             {
-                if (IsAppInModelToEdit(checkBoxApp))
-                    appsToRemove.Add(checkBoxApp);
+                if (item.App.Name == app.Name && item.App.Position.Equals(app.Position))
+                    return aviableAppsCheckListBox.Items.IndexOf(item);
             }
-
-            RemoveAppsFromCheckList(appsToRemove);
+            return -1;
         }
-
-        private bool IsAppInModelToEdit(AppModel app)
-        {
-            List<AppModel> filteredApps = layoutToEdit.Apps.Where(x => x.Name == app.Name).ToList();
-            if (filteredApps.Count != 0)
-                return true;
-            return false;
-        }
-
-        private void RemoveAppsFromCheckList(List<AppModel> appsToRemove)
-        {
-            foreach (AppModel appToDelete in appsToRemove)
-            {
-                aviableAppsCheckListBox.Items.Remove(appToDelete);
-            }
-        }
-
 
         private void refreshButton_Click(object sender, EventArgs e)
         {

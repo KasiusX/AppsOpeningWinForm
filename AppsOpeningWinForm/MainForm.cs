@@ -85,10 +85,11 @@ namespace AppsOpeningWinForm
             }
         }
 
-        private void editLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private async void editLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (layoutsListBox.SelectedItem != null)
             {
+                await LoadLayout();
                 EditLayoutForm form = new EditLayoutForm(manager, (LayoutModel)layoutsListBox.SelectedItem);
                 form.ShowDialog();
                 SetBindings();
@@ -116,11 +117,17 @@ namespace AppsOpeningWinForm
                 loadLayoutButton_Click(this, EventArgs.Empty);
         }
 
-        private async void loadLayoutButton_Click(object sender, EventArgs e)
+        private void loadLayoutButton_Click(object sender, EventArgs e)
+        {
+            string message = LoadLayout().Result;
+            if (message != "")
+                MessageBoxes.InformationMessageBox(message, "Done");
+        }
+
+        private async Task<string> LoadLayout()
         {
             if (layoutsListBox.SelectedItem != null)
             {
-                string message = "" ;
                 LoadLayoutRequest request = new LoadLayoutRequest
                 {
                     Layout = (LayoutModel)layoutsListBox.SelectedItem,
@@ -131,14 +138,14 @@ namespace AppsOpeningWinForm
 
                 try
                 {
-                    message = await Task.Run(() => manager.LoadLayoutModel(request));
+                    return await Task.Run(() => manager.LoadLayoutModel(request));
                 }
                 catch (Win32Exception ex)
                 {
-                    MessageBoxes.ErrorMessageBox(ex.Message, "Acces denined");
+                    MessageBoxes.ErrorMessageBox(ex.Message, "Acces denined");                    
                 }
-                MessageBox.Show(message);
             }
+            return "";
         }
     }
 }
