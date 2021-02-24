@@ -26,6 +26,8 @@ namespace OpeningDifferentApps
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
+        private static List<IntPtr> PlacedWindows { get; set; }
+
         public static Rect GetAppPosition(string appName)
         {
             IntPtr window = ProcessManager.GetWindowByName(appName);            
@@ -39,14 +41,34 @@ namespace OpeningDifferentApps
             return position;
         }
 
+        public static void ResetWindows()
+        {
+            PlacedWindows = new List<IntPtr>();
+        }
+
         public static void SetAppPosition(AppModel app)
         {
             Console.WriteLine($"Setting position of {app.Name}");
-            IntPtr window = ProcessManager.GetWindowByName(app.Name);                      
+            IntPtr window = GetValidWindow(app.Name);                      
             ShowWindow(window, 9);
             SetWindowPos(window, IntPtr.Zero, app.Position.Left, app.Position.Top, app.Position.Width, app.Position.Height, SWP_SHOWWINDOW);
             Console.WriteLine($"position of {app.Name} set");
+        }     
+        
+        private static IntPtr GetValidWindow(string appName)
+        {
+            List<IntPtr> allAppWindows = WindowsManager.GetAllWindows(appName);
+            foreach (IntPtr window in allAppWindows)
+            {
+                if (!PlacedWindows.Contains(window))
+                {
+                    PlacedWindows.Add(window);
+                    return window;
+                }
+            }
+            return IntPtr.Zero;
         }
+
 
         public static bool IsAppOnCorrectPosition(AppModel app) => app.Position.Equals(GetAppPosition(app.Name));                
         

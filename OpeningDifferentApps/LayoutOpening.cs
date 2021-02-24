@@ -21,6 +21,11 @@ namespace OpeningDifferentApps
                 ProcessManager.CloseAllVisibleProcesses(GetAppsNames(request.Layout.Apps));
 
             List<Task> layoutTasks = new List<Task>();
+
+
+            OpenApps(request.Layout.Apps);
+
+            AppsPosition.ResetWindows();
             foreach (AppModel app in request.Layout.Apps)
             {
                 layoutTasks.Add(Task.Run(() => LoadApp(request, app)));
@@ -30,12 +35,10 @@ namespace OpeningDifferentApps
             return "All done";
         }
 
+
+
         private bool LoadApp(LoadLayoutRequest request, AppModel app)
-        {
-            if (!request.OnlyClosedApps || !ProcessManager.IsAppOpen(app))
-            {                
-                StartApp(app);                
-            }            
+        {                        
             if(IsPositionZero(app))
             {
                 app.Position = AppsPosition.GetAppPosition(app.Name);
@@ -47,6 +50,22 @@ namespace OpeningDifferentApps
             }
             AppsPosition.BringWindowForward(app);           
             return true;
+        }
+
+        private void OpenApps(List<AppModel> requestedApps)
+        {
+            var groupedApps = requestedApps.GroupBy(x => x.FilePath);
+            foreach (var groupedApp in groupedApps)
+            {
+                int neededToOpen = groupedApp.Count() - WindowsManager.GetAllWindows(groupedApp.First().Name).Count;
+                if (neededToOpen > 0)
+                {
+                    for (int i = 0; i < neededToOpen; i++)
+                    {
+                        StartApp(groupedApp.First());
+                    }
+                }
+            }
         }
 
         private List<string> GetAppsNames(List<AppModel> apps)

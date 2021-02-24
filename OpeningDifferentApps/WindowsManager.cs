@@ -26,24 +26,20 @@ namespace OpeningDifferentApps
 
         public static List<ListBoxAppModel> GetAllWindows()
         {
-            List<ListBoxAppModel> visibleApps = new List<ListBoxAppModel>();
-            Console.WriteLine("Getting handles");
-            GetHandles();
-            Console.WriteLine($"Handles done({VisibleWindows.Count})");
-            List<Process> visibleProcesses = ProcessManager.GetVisibleProcesses();
-            foreach (IntPtr window in VisibleWindows)
+            List<ListBoxAppModel> listForCheckbox = new List<ListBoxAppModel>();
+            Console.WriteLine("Getting handles");            
+            Console.WriteLine($"Handles done({VisibleWindows.Count})");           
+            List<AppModel> visibleApps = GetVisibleApps(out List<string> titles);
+            foreach (AppModel app in visibleApps)
             {
-                if (FilterWindow(window, visibleProcesses, out string startingFile, out string name))
+                listForCheckbox.Add(new ListBoxAppModel
                 {
-                    visibleApps.Add(new ListBoxAppModel
-                    {
-                        App = CreateAppModel(startingFile, name, window),
-                        Title = GetWindowText(window)
-                    });
-                }
+                    App = app,
+                    Title = titles[visibleApps.IndexOf(app)]
+                });
             }
             Console.WriteLine("Everything done");
-            return visibleApps;
+            return listForCheckbox;
         }
 
         private static bool FilterWindow(IntPtr window,List<Process> visibleProcesses,out string startingFile, out string name)
@@ -62,6 +58,23 @@ namespace OpeningDifferentApps
             }
         }
 
+        public static List<AppModel> GetVisibleApps(out List<string> titles)
+        {
+            List<AppModel> visibleApps = new List<AppModel>();
+            SetHandles();
+            titles = new List<string>();
+            List<Process> visibleProcesses = ProcessManager.GetVisibleProcesses();
+            foreach (IntPtr window in VisibleWindows)
+            {
+                if(FilterWindow(window, visibleProcesses, out string startingFile, out string name))
+                {
+                    visibleApps.Add(CreateAppModel(startingFile,name,window));
+                    titles.Add(GetWindowText(window));
+                }
+            }
+            return visibleApps;
+        }
+
         private static AppModel CreateAppModel(string startingFile, string name, IntPtr window)
         {
             Console.WriteLine("Making appModel");
@@ -73,7 +86,7 @@ namespace OpeningDifferentApps
             };
         }
 
-        private static void GetHandles()
+        private static void SetHandles()
         {
             VisibleWindows = new List<IntPtr>();
             List<IntPtr> visibleWindows = new List<IntPtr>();
@@ -100,6 +113,22 @@ namespace OpeningDifferentApps
             StringBuilder sb_title = new StringBuilder(1024);
             int length = GetWindowText(window, sb_title, sb_title.Capacity);
             return sb_title.ToString();
+        }
+
+        public static List<IntPtr> GetAllWindows(string appName)
+        {
+            List<IntPtr> visibleWindows = new List<IntPtr>();
+            SetHandles();
+            List<Process> visibleProcesses = ProcessManager.GetVisibleProcesses();
+            foreach (IntPtr window in VisibleWindows)
+            {
+                ProcessManager.GetStartingFileAndName(window, visibleProcesses, out string path, out string name);
+                if(appName == name)
+                {
+                    visibleWindows.Add(window);
+                }
+            }
+            return visibleWindows;
         }
     }
 }
