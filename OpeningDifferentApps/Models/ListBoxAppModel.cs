@@ -10,6 +10,7 @@ namespace OpeningDifferentApps.Models
     {
         public AppModel App { get; set; }
         public string Title { get; set; }
+        public IntPtr Window { get; set; }
 
         public override string ToString()
         {

@@ -44,12 +44,22 @@ namespace AppsOpeningWinForm
         public List<AppModel> GetCheckedApps(CheckedListBox checkedListBox)
         {
             List<AppModel> checkedApps = new List<AppModel>();
-            foreach (var app in checkedListBox.CheckedItems)
+            foreach (var listBoxApp in checkedListBox.CheckedItems)
             {
-                ListBoxAppModel selectedItem = (ListBoxAppModel)app;
+                ListBoxAppModel selectedItem = (ListBoxAppModel)listBoxApp;
                 checkedApps.Add(selectedItem.App);
             }
             return checkedApps;
+        }
+
+        public List<ListBoxAppModel> GetCheckedListBoxItems(CheckedListBox checkedListBox)
+        {
+            List<ListBoxAppModel> checkedListBoxItems = new List<ListBoxAppModel>();
+            foreach (var listboxApp in checkedListBox.CheckedItems)
+            {
+                checkedListBoxItems.Add((ListBoxAppModel)listboxApp);
+            }
+            return checkedListBoxItems;
         }
     }
 }

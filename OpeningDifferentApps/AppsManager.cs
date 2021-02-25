@@ -37,8 +37,9 @@ namespace OpeningDifferentApps
             return isValid;
         }
 
-        public bool EditLayoutModel(string name, List<AppModel> apps, int id, LayoutModel layoutToEdit)
+        public bool EditLayoutModel(string name, List<ListBoxAppModel> listboxApps, int id, LayoutModel layoutToEdit)
         {
+            List<AppModel> apps = GetAppModels(listboxApps);
             bool isValid = validation.ValidateLayout(name, apps);
             if (isValid)
             {
@@ -50,6 +51,18 @@ namespace OpeningDifferentApps
                 });
             }
             return isValid;
+        }
+
+        private List<AppModel> GetAppModels(List<ListBoxAppModel> listboxApps)
+        {
+            List<AppModel> output = new List<AppModel>();
+            foreach (var listBoxApp in listboxApps)
+            {
+                AppModel app = listBoxApp.App;
+                app.Position = AppsPosition.GetAppPosition(listBoxApp.Window);
+                output.Add(app);
+            }
+            return output;
         }
         public string LoadLayoutModel(LoadLayoutRequest request)
         {
@@ -65,5 +78,7 @@ namespace OpeningDifferentApps
         {
             ProcessManager.CloseAllVisibleProcesses();
         }
+
+
     }
 }

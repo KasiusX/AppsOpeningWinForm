@@ -76,11 +76,10 @@ namespace AppsOpeningWinForm
         }
 
         private void editLayoutButton_Click(object sender, EventArgs e)
-        {
-            List<AppModel> selectedApps = logic.GetCheckedApps(aviableAppsCheckListBox);
+        {            
             try
             {
-                if (manager.EditLayoutModel(nameValue.Text, selectedApps, layoutToEdit.Id, layoutToEdit))
+                if (manager.EditLayoutModel(nameValue.Text, logic.GetCheckedListBoxItems(aviableAppsCheckListBox), layoutToEdit.Id, layoutToEdit))
                     this.Close();
             }
             catch (ValidationException ex)

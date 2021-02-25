@@ -29,13 +29,14 @@ namespace OpeningDifferentApps
             List<ListBoxAppModel> listForCheckbox = new List<ListBoxAppModel>();
             Console.WriteLine("Getting handles");            
             Console.WriteLine($"Handles done({VisibleWindows.Count})");           
-            List<AppModel> visibleApps = GetVisibleApps(out List<string> titles);
+            List<AppModel> visibleApps = GetVisibleApps(out List<string> titles, out List<IntPtr> windows);
             foreach (AppModel app in visibleApps)
             {
                 listForCheckbox.Add(new ListBoxAppModel
                 {
                     App = app,
-                    Title = titles[visibleApps.IndexOf(app)]
+                    Title = titles[visibleApps.IndexOf(app)],
+                    Window = windows[visibleApps.IndexOf(app)]
                 });
             }
             Console.WriteLine("Everything done");
@@ -58,17 +59,19 @@ namespace OpeningDifferentApps
             }
         }
 
-        public static List<AppModel> GetVisibleApps(out List<string> titles)
+        public static List<AppModel> GetVisibleApps(out List<string> titles, out List<IntPtr> windows)
         {
             List<AppModel> visibleApps = new List<AppModel>();
             SetHandles();
             titles = new List<string>();
+            windows = new List<IntPtr>();
             List<Process> visibleProcesses = ProcessManager.GetVisibleProcesses();
             foreach (IntPtr window in VisibleWindows)
             {
                 if(FilterWindow(window, visibleProcesses, out string startingFile, out string name))
                 {
                     visibleApps.Add(CreateAppModel(startingFile,name,window));
+                    windows.Add(window);
                     titles.Add(GetWindowText(window));
                 }
             }
